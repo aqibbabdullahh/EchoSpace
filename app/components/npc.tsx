@@ -121,6 +121,7 @@ const Scene = ({ currentLobby }) => {
     const [messageNotification, setMessageNotification] = useState<{
         from: string;
         message: string;
+        fromProfileId: string;
     } | null>(null);
 
     // ============================================
@@ -475,10 +476,10 @@ const Scene = ({ currentLobby }) => {
     useEffect(() => {
         if (!profile) return;
 
-        console.log('🔔 Setting up notification subscription for profile:', profile.id);
+        console.log('🔔 Setting up notification subscription for profile:', profile.id, 'Lobby:', currentLobby?.lobbyId);
         
         const channel = supabase
-            .channel(`user_notifications:${profile.id}`)
+            .channel(`user_notifications:${profile.id}:${currentLobby?.lobbyId}`)
             .on(
                 'postgres_changes',
                 {
@@ -490,6 +491,13 @@ const Scene = ({ currentLobby }) => {
                 async (payload) => {
                     const message = payload.new as any;
                     console.log('📬 New private message received:', message);
+                    console.log('📬 Message lobby:', message.lobby_id, 'Current lobby:', currentLobby?.lobbyId);
+
+                    // Only show notifications for messages in the current lobby
+                    if (message.lobby_id !== currentLobby?.lobbyId) {
+                        console.log('⏭️ Skipping notification - message from different lobby');
+                        return;
+                    }
 
                     // Don't show notification if chat is already open with this user
                     if (privateChatTarget?.profileId === message.from_profile_id) {
@@ -505,18 +513,22 @@ const Scene = ({ currentLobby }) => {
                         .single();
 
                     const senderName = senderProfile?.username || 'Someone';
+                    
+                    console.log('🔔 Showing notification from:', senderName);
 
                     // Update unread count
                     setUnreadMessages(prev => {
                         const newMap = new Map(prev);
                         newMap.set(message.from_profile_id, (newMap.get(message.from_profile_id) || 0) + 1);
+                        console.log('📊 Updated unread count:', newMap);
                         return newMap;
                     });
 
                     // Show popup notification
                     setMessageNotification({
                         from: senderName,
-                        message: message.message
+                        message: message.message,
+                        fromProfileId: message.from_profile_id
                     });
 
                     // Play notification sound (optional)
@@ -549,7 +561,7 @@ const Scene = ({ currentLobby }) => {
             console.log('🔕 Cleaning up notification subscription');
             supabase.removeChannel(channel);
         };
-    }, [profile?.id, privateChatTarget]);
+    }, [profile?.id, privateChatTarget, currentLobby?.lobbyId]);
 
 
 
@@ -2621,8 +2633,21 @@ const Scene = ({ currentLobby }) => {
                         <div className="flex gap-3">
                             <button 
                                 onClick={() => {
-                                    // TODO: Open chat with sender
-                                    setMessageNotification(null);
+                                    if (messageNotification) {
+                                        // Open chat with the sender
+                                        setPrivateChatTarget({
+                                            profileId: messageNotification.fromProfileId,
+                                            username: messageNotification.from
+                                        });
+                                        // Clear the notification
+                                        setMessageNotification(null);
+                                        // Clear unread count
+                                        setUnreadMessages(prev => {
+                                            const newMap = new Map(prev);
+                                            newMap.delete(messageNotification.fromProfileId);
+                                            return newMap;
+                                        });
+                                    }
                                 }}
                                 className="flex-1 bg-white/25 hover:bg-white/35 backdrop-blur-xl px-4 py-3 rounded-xl text-sm font-black transition-all btn-3d border-2 border-white/30 neon-text shadow-xl"
                             >

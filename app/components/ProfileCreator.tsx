@@ -245,10 +245,9 @@ const ProfileCreator = ({ onComplete, editingProfile, isEditing = false }: Profi
                                 placeholder="Enter username..."
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
-                                className="h-14 px-4 text-lg bg-white/10 border border-white/20 rounded-xl text-white placeholder:text-gray-500 focus:bg-white/15 focus:border-purple-500/50 focus:ring-2 focus:ring-purple-500/20 transition-all duration-200"
+                                className="h-14 px-4 text-lg bg-gray-900/90 border border-gray-700 rounded-xl text-white placeholder:text-gray-500 focus:bg-gray-900 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/30 transition-all duration-200"
                                 style={{ 
-                                    fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif",
-                                    backdropFilter: 'blur(20px)'
+                                    fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif"
                                 }}
                                 maxLength={20}
                             />
