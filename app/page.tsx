@@ -52,10 +52,7 @@ export default function Home() {
   if (!profile) {
     return (
       <div className="min-h-screen bg-gray-900 flex items-center justify-center p-8">
-        <ProfileCreator onComplete={async () => {
-          // Reload user data after profile creation
-          await initializeUser();
-        }} />
+        <ProfileCreator onComplete={() => {}} />
       </div>
     );
   }
