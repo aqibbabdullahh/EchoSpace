@@ -21,6 +21,8 @@ CREATE INDEX IF NOT EXISTS idx_private_messages_from ON private_messages(from_pr
 CREATE INDEX IF NOT EXISTS idx_private_messages_to ON private_messages(to_profile_id, created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_private_messages_conversation ON private_messages(from_profile_id, to_profile_id, created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_private_messages_unread ON private_messages(to_profile_id, is_read) WHERE is_read = false;
+CREATE INDEX IF NOT EXISTS idx_private_messages_lobby ON private_messages(lobby_id, created_at DESC);  -- Filter by lobby
+CREATE INDEX IF NOT EXISTS idx_private_messages_lobby_users ON private_messages(lobby_id, from_profile_id, to_profile_id, created_at DESC);  -- Lobby-scoped conversations
 
 -- 3. Create active_chats table to track ongoing conversations
 CREATE TABLE IF NOT EXISTS active_chats (
