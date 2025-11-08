@@ -103,9 +103,16 @@ export default function PrivateChat({
     };
 
     const setupRealtimeSubscription = () => {
+        console.log('🔌 Setting up realtime subscriptions between', myProfileId, 'and', targetProfileId);
+        
         // Subscribe to messages FROM target user TO me
         const channelFrom = supabase
-            .channel(`private_chat_from:${targetProfileId}:${myProfileId}`)
+            .channel(`private_chat_from:${targetProfileId}:${myProfileId}`, {
+                config: {
+                    broadcast: { self: false },
+                    presence: { key: '' }
+                }
+            })
             .on(
                 'postgres_changes',
                 {
@@ -118,23 +125,38 @@ export default function PrivateChat({
                     const newMsg = payload.new as PrivateMessage;
                     // Only add if it's for me
                     if (newMsg.to_profile_id === myProfileId) {
-                        console.log('📩 Received message from', targetProfileId);
+                        console.log('📩 Received message from', targetProfileId, ':', newMsg);
                         setMessages(prev => {
                             // Avoid duplicates
-                            if (prev.find(m => m.id === newMsg.id)) return prev;
+                            if (prev.find(m => m.id === newMsg.id)) {
+                                console.log('⚠️ Duplicate message detected, skipping');
+                                return prev;
+                            }
                             return [...prev, newMsg];
                         });
                         markMessagesAsRead();
                     }
                 }
             )
-            .subscribe((status) => {
-                console.log('📡 From subscription:', status);
+            .subscribe((status, err) => {
+                console.log('📡 From subscription status:', status);
+                if (status === 'SUBSCRIBED') {
+                    console.log('✅ Successfully subscribed to incoming messages from', targetProfileId);
+                } else if (status === 'CHANNEL_ERROR') {
+                    console.error('❌ Channel error for incoming messages:', err);
+                } else if (status === 'TIMED_OUT') {
+                    console.error('⏱️ Subscription timed out, retrying...');
+                }
             });
 
         // Subscribe to messages FROM me TO target user
         const channelTo = supabase
-            .channel(`private_chat_to:${myProfileId}:${targetProfileId}`)
+            .channel(`private_chat_to:${myProfileId}:${targetProfileId}`, {
+                config: {
+                    broadcast: { self: false },
+                    presence: { key: '' }
+                }
+            })
             .on(
                 'postgres_changes',
                 {
@@ -147,17 +169,27 @@ export default function PrivateChat({
                     const newMsg = payload.new as PrivateMessage;
                     // Only add if it's to target
                     if (newMsg.to_profile_id === targetProfileId) {
-                        console.log('📤 Sent message to', targetProfileId);
+                        console.log('📤 Sent message to', targetProfileId, ':', newMsg);
                         setMessages(prev => {
                             // Avoid duplicates
-                            if (prev.find(m => m.id === newMsg.id)) return prev;
+                            if (prev.find(m => m.id === newMsg.id)) {
+                                console.log('⚠️ Duplicate message detected, skipping');
+                                return prev;
+                            }
                             return [...prev, newMsg];
                         });
                     }
                 }
             )
-            .subscribe((status) => {
-                console.log('📡 To subscription:', status);
+            .subscribe((status, err) => {
+                console.log('📡 To subscription status:', status);
+                if (status === 'SUBSCRIBED') {
+                    console.log('✅ Successfully subscribed to outgoing messages to', targetProfileId);
+                } else if (status === 'CHANNEL_ERROR') {
+                    console.error('❌ Channel error for outgoing messages:', err);
+                } else if (status === 'TIMED_OUT') {
+                    console.error('⏱️ Subscription timed out, retrying...');
+                }
             });
 
         subscriptionRef.current = { from: channelFrom, to: channelTo };

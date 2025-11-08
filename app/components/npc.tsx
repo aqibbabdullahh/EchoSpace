@@ -474,6 +474,8 @@ const Scene = ({ currentLobby }) => {
     useEffect(() => {
         if (!profile) return;
 
+        console.log('🔔 Setting up notification subscription for profile:', profile.id);
+        
         const channel = supabase
             .channel(`user_notifications:${profile.id}`)
             .on(
@@ -490,6 +492,7 @@ const Scene = ({ currentLobby }) => {
 
                     // Don't show notification if chat is already open with this user
                     if (privateChatTarget?.profileId === message.from_profile_id) {
+                        console.log('💬 Chat already open, skipping notification');
                         return;
                     }
 
@@ -532,9 +535,17 @@ const Scene = ({ currentLobby }) => {
                     }, 5000);
                 }
             )
-            .subscribe();
+            .subscribe((status) => {
+                console.log('🔔 Notification subscription status:', status);
+                if (status === 'SUBSCRIBED') {
+                    console.log('✅ Notification channel ready for profile:', profile.id);
+                } else if (status === 'CHANNEL_ERROR') {
+                    console.error('❌ Notification subscription failed!');
+                }
+            });
 
         return () => {
+            console.log('🔕 Cleaning up notification subscription');
             supabase.removeChannel(channel);
         };
     }, [profile?.id, privateChatTarget]);
