@@ -3,7 +3,9 @@
 @tailwind utilities;
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+  overflow-x: hidden;
 }
 
 @layer base {
@@ -70,6 +72,394 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/* 3D Effects and Advanced Animations */
+@keyframes float-3d {
+    0%, 100% {
+        transform: translateY(0px) rotateX(0deg) rotateY(0deg);
+    }
+    50% {
+        transform: translateY(-20px) rotateX(5deg) rotateY(5deg);
+    }
+}
+
+@keyframes pulse-glow {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(99, 102, 241, 0.5),
+                    0 0 40px rgba(139, 92, 246, 0.3),
+                    0 0 60px rgba(168, 85, 247, 0.2);
+    }
+    50% {
+        box-shadow: 0 0 30px rgba(99, 102, 241, 0.8),
+                    0 0 60px rgba(139, 92, 246, 0.6),
+                    0 0 90px rgba(168, 85, 247, 0.4);
+    }
+}
+
+@keyframes gradient-shift {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+@keyframes card-hover-3d {
+    from {
+        transform: perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px);
+    }
+    to {
+        transform: perspective(1000px) rotateX(-5deg) rotateY(5deg) translateZ(20px);
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -1000px 0;
+    }
+    100% {
+        background-position: 1000px 0;
+    }
+}
+
+@keyframes particle-float {
+    0%, 100% {
+        transform: translate(0, 0) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        transform: translate(100px, -100px) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* 3D Card Class */
+.card-3d {
+    transform-style: preserve-3d;
+    transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    box-shadow: 
+        0 10px 30px -5px rgba(0, 0, 0, 0.3),
+        0 0 50px rgba(99, 102, 241, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.card-3d:hover {
+    transform: perspective(1000px) rotateX(-3deg) rotateY(3deg) translateZ(30px) scale(1.02);
+    box-shadow: 
+        0 30px 60px -10px rgba(0, 0, 0, 0.5),
+        0 0 100px rgba(99, 102, 241, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* Glassmorphism 3D */
+.glass-3d {
+    background: rgba(30, 41, 59, 0.7);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 
+        0 8px 32px 0 rgba(31, 38, 135, 0.37),
+        inset 0 1px 1px 0 rgba(255, 255, 255, 0.1),
+        0 0 30px rgba(99, 102, 241, 0.2);
+}
+
+/* Neon Glow Effects */
+.neon-border {
+    position: relative;
+    border: 2px solid transparent;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(168, 85, 247, 0.1)) padding-box,
+                linear-gradient(135deg, #6366f1, #a855f7, #ec4899) border-box;
+    animation: pulse-glow 3s ease-in-out infinite;
+}
+
+.neon-text {
+    text-shadow: 
+        0 0 10px rgba(99, 102, 241, 0.8),
+        0 0 20px rgba(139, 92, 246, 0.6),
+        0 0 30px rgba(168, 85, 247, 0.4),
+        0 0 40px rgba(236, 72, 153, 0.3);
+    animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Gradient Backgrounds */
+.gradient-animated {
+    background: linear-gradient(270deg, #6366f1, #8b5cf6, #a855f7, #ec4899);
+    background-size: 400% 400%;
+    animation: gradient-shift 8s ease infinite;
+}
+
+/* Shimmer Effect */
+.shimmer {
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.1) 50%,
+        transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+}
+
+/* Floating Particles Background */
+.particles-bg::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(circle, rgba(99, 102, 241, 0.1) 1px, transparent 1px),
+        radial-gradient(circle, rgba(168, 85, 247, 0.1) 1px, transparent 1px);
+    background-size: 50px 50px, 80px 80px;
+    background-position: 0 0, 40px 60px;
+    animation: particle-float 20s linear infinite;
+}
+
+/* Add these styles */
+#joystick-zone * {
+    touch-action: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    outline: none;
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+}
+
+/* Enable text selection for chat content */
+.select-text {
+    -webkit-user-select: text !important;
+    -khtml-user-select: text !important;
+    -moz-user-select: text !important;
+    -ms-user-select: text !important;
+    user-select: text !important;
+}
+
+/* Custom scrollbar styles */
+.scrollbar-thin::-webkit-scrollbar {
+    width: 8px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+    background: rgba(30, 41, 59, 0.3);
+    border-radius: 10px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #6366f1, #8b5cf6);
+    border-radius: 10px;
+    border: 2px solid rgba(30, 41, 59, 0.3);
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #8b5cf6, #a855f7);
+}
+
+.scrollbar-track-transparent::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.scrollbar-thumb-slate-600::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #475569, #64748b);
+}
+
+/* Smooth animations */
+@keyframes slide-in-from-right {
+    from {
+        transform: translateX(100%) rotateY(90deg);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0) rotateY(0deg);
+        opacity: 1;
+    }
+}
+
+@keyframes slide-in-from-right-5 {
+    from {
+        transform: translateX(20px) scale(0.9);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0) scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes slide-in-from-bottom-2 {
+    from {
+        transform: translateY(8px) scale(0.95);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+        filter: blur(5px);
+    }
+    to {
+        opacity: 1;
+        filter: blur(0);
+    }
+}
+
+@keyframes zoom-in {
+    from {
+        transform: scale(0.8) rotateX(20deg);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1) rotateX(0deg);
+        opacity: 1;
+    }
+}
+
+@keyframes bounce-in {
+    0% {
+        transform: scale(0) rotate(-180deg);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.1) rotate(10deg);
+    }
+    100% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+    }
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.animate-in {
+    animation-fill-mode: both;
+}
+
+.slide-in-from-right {
+    animation: slide-in-from-right 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.slide-in-from-right-5 {
+    animation: slide-in-from-right-5 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.slide-in-from-bottom-2 {
+    animation: slide-in-from-bottom-2 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.fade-in {
+    animation: fade-in 0.5s ease-out;
+}
+
+.zoom-in {
+    animation: zoom-in 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.bounce-in {
+    animation: bounce-in 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.duration-200 {
+    animation-duration: 0.2s;
+}
+
+.duration-300 {
+    animation-duration: 0.3s;
+}
+
+.duration-500 {
+    animation-duration: 0.5s;
+}
+
+/* Holographic Effect */
+.holographic {
+    background: linear-gradient(
+        135deg,
+        rgba(99, 102, 241, 0.3) 0%,
+        rgba(139, 92, 246, 0.3) 25%,
+        rgba(168, 85, 247, 0.3) 50%,
+        rgba(236, 72, 153, 0.3) 75%,
+        rgba(99, 102, 241, 0.3) 100%
+    );
+    background-size: 400% 400%;
+    animation: gradient-shift 6s ease infinite;
+    position: relative;
+    overflow: hidden;
+}
+
+.holographic::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        transparent 30%,
+        rgba(255, 255, 255, 0.1) 50%,
+        transparent 70%
+    );
+    animation: shimmer 3s infinite;
+}
+
+/* 3D Button Hover */
+.btn-3d {
+    position: relative;
+    transform-style: preserve-3d;
+    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.btn-3d::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: inherit;
+    transform: translateZ(-10px);
+    filter: blur(10px);
+    opacity: 0.7;
+    border-radius: inherit;
+}
+
+.btn-3d:hover {
+    transform: translateY(-5px) rotateX(10deg) scale(1.05);
+    box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.4),
+        0 0 50px rgba(99, 102, 241, 0.6);
+}
+
+.btn-3d:active {
+    transform: translateY(-2px) scale(0.98);
+}
+
+
 
 /* Add these styles */
 #joystick-zone * {

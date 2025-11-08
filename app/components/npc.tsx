@@ -2081,60 +2081,69 @@ const Scene = ({ currentLobby }) => {
 
             {/* Interaction Prompt */}
             {isNearNPC && !isChatting && !privateChatTarget && (
-                <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 animate-in fade-in zoom-in duration-300">
+                <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 animate-in bounce-in duration-500">
                     {nearestAvatarRef.current?.type === 'digital-twin' ? (
-                        <div className="bg-gradient-to-br from-slate-900/95 via-slate-800/95 to-slate-900/95 backdrop-blur-xl text-white px-8 py-6 rounded-2xl shadow-2xl border border-slate-700/50">
-                            <div className="text-center space-y-4">
-                                <div className="flex items-center justify-center gap-3 mb-2">
-                                    <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-full flex items-center justify-center text-xl shadow-lg">
-                                        {nearestAvatarRef.current.data.profile.username.charAt(0).toUpperCase()}
+                        <div className="card-3d glass-3d text-white px-10 py-8 rounded-3xl shadow-2xl border-2 border-indigo-500/40 neon-border relative overflow-hidden">
+                            {/* Holographic Background */}
+                            <div className="absolute inset-0 holographic opacity-30 pointer-events-none"></div>
+                            
+                            <div className="text-center space-y-5 relative z-10">
+                                <div className="flex items-center justify-center gap-4 mb-3">
+                                    <div className="relative" style={{ animation: 'float-3d 3s ease-in-out infinite' }}>
+                                        <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 rounded-2xl flex items-center justify-center text-2xl shadow-2xl card-3d border-3 border-white/20 neon-border">
+                                            {nearestAvatarRef.current.data.profile.username.charAt(0).toUpperCase()}
+                                        </div>
+                                        <div className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full border-3 border-slate-900 shadow-xl" style={{ animation: 'pulse-glow 2s infinite' }}></div>
                                     </div>
                                     <div className="text-left">
-                                        <p className="font-bold text-lg text-white">
+                                        <p className="font-black text-xl text-white neon-text tracking-wide">
                                             {nearestAvatarRef.current.data.profile.username}
                                         </p>
-                                        <p className="text-xs text-slate-400 flex items-center gap-1">
-                                            <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                                        <p className="text-sm text-indigo-300 flex items-center gap-2 font-bold mt-1">
+                                            <span className="w-2.5 h-2.5 bg-green-400 rounded-full shadow-lg shadow-green-400/50" style={{ animation: 'pulse-glow 1.5s infinite' }}></span>
                                             Nearby Player
                                         </p>
                                     </div>
                                 </div>
                                 
-                                <div className="flex gap-3 justify-center">
-                                    <button className="group relative bg-gradient-to-br from-blue-600/90 to-blue-700/90 hover:from-blue-500 hover:to-blue-600 px-5 py-3 rounded-xl transition-all duration-300 hover:scale-105 active:scale-95 shadow-lg border border-blue-500/30">
-                                        <div className="flex items-center gap-2">
-                                            <kbd className="bg-white/20 text-blue-200 px-2 py-1 rounded-lg text-sm font-bold shadow-inner">F</kbd>
-                                            <span className="text-sm font-medium text-white">AI Chat</span>
+                                <div className="flex gap-4 justify-center">
+                                    <button className="group relative gradient-animated px-6 py-4 rounded-2xl transition-all duration-300 btn-3d shadow-2xl border-2 border-blue-400/50 neon-border overflow-hidden">
+                                        <div className="absolute inset-0 shimmer opacity-20"></div>
+                                        <div className="flex items-center gap-3 relative z-10">
+                                            <kbd className="bg-white/30 text-blue-100 px-3 py-1.5 rounded-xl text-base font-black shadow-lg border border-white/20">F</kbd>
+                                            <span className="text-base font-bold text-white neon-text">AI Chat</span>
                                         </div>
-                                        <div className="absolute -top-1 -right-1 w-3 h-3 bg-blue-400 rounded-full opacity-0 group-hover:opacity-100 animate-ping"></div>
+                                        <div className="absolute -top-2 -right-2 w-4 h-4 bg-blue-400 rounded-full opacity-0 group-hover:opacity-100" style={{ animation: 'pulse-glow 1s infinite' }}></div>
                                     </button>
                                     
-                                    <button className="group relative bg-gradient-to-br from-green-600/90 to-emerald-700/90 hover:from-green-500 hover:to-emerald-600 px-5 py-3 rounded-xl transition-all duration-300 hover:scale-105 active:scale-95 shadow-lg border border-green-500/30">
-                                        <div className="flex items-center gap-2">
-                                            <kbd className="bg-white/20 text-green-200 px-2 py-1 rounded-lg text-sm font-bold shadow-inner">G</kbd>
-                                            <span className="text-sm font-medium text-white">Message</span>
+                                    <button className="group relative bg-gradient-to-br from-emerald-600 via-green-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 px-6 py-4 rounded-2xl transition-all duration-300 btn-3d shadow-2xl border-2 border-emerald-400/50 neon-border overflow-hidden">
+                                        <div className="absolute inset-0 shimmer opacity-20"></div>
+                                        <div className="flex items-center gap-3 relative z-10">
+                                            <kbd className="bg-white/30 text-emerald-100 px-3 py-1.5 rounded-xl text-base font-black shadow-lg border border-white/20">G</kbd>
+                                            <span className="text-base font-bold text-white neon-text">Message</span>
                                         </div>
                                         {unreadMessages.get(nearestAvatarRef.current.data.profile.id) > 0 && (
-                                            <div className="absolute -top-2 -right-2 bg-gradient-to-br from-red-500 to-pink-600 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg animate-bounce border-2 border-white">
+                                            <div className="absolute -top-3 -right-3 bg-gradient-to-br from-red-500 via-pink-500 to-rose-600 text-white text-sm font-black px-3 py-1.5 rounded-full shadow-2xl border-3 border-white neon-border" style={{ animation: 'bounce-in 0.6s ease-out, pulse-glow 2s infinite' }}>
                                                 {unreadMessages.get(nearestAvatarRef.current.data.profile.id)}
                                             </div>
                                         )}
-                                        <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full opacity-0 group-hover:opacity-100 animate-ping"></div>
+                                        <div className="absolute -top-2 -right-2 w-4 h-4 bg-emerald-400 rounded-full opacity-0 group-hover:opacity-100" style={{ animation: 'pulse-glow 1s infinite' }}></div>
                                     </button>
                                 </div>
                             </div>
                         </div>
                     ) : (
-                        <div className="bg-gradient-to-br from-slate-900/95 via-slate-800/95 to-slate-900/95 backdrop-blur-xl text-white px-8 py-6 rounded-2xl shadow-2xl border border-slate-700/50">
-                            <div className="flex items-center gap-3">
-                                <div className="w-12 h-12 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-full flex items-center justify-center text-2xl shadow-lg animate-bounce">
+                        <div className="card-3d glass-3d text-white px-10 py-7 rounded-3xl shadow-2xl border-2 border-amber-500/40 neon-border overflow-hidden">
+                            <div className="absolute inset-0 bg-gradient-to-br from-amber-600/10 to-orange-600/10 holographic pointer-events-none"></div>
+                            <div className="flex items-center gap-4 relative z-10">
+                                <div className="w-16 h-16 bg-gradient-to-br from-amber-500 via-orange-500 to-red-500 rounded-2xl flex items-center justify-center text-3xl shadow-2xl card-3d border-3 border-white/20" style={{ animation: 'float-3d 2s ease-in-out infinite' }}>
                                     🤖
                                 </div>
                                 <div>
-                                    <p className="text-sm text-slate-400">Press to interact</p>
-                                    <div className="flex items-center gap-2 mt-1">
-                                        <kbd className="bg-white/20 text-white px-3 py-1.5 rounded-lg font-bold shadow-inner">F</kbd>
-                                        <span className="text-white font-medium">Talk with Host</span>
+                                    <p className="text-sm text-amber-300 font-bold mb-2">Press to interact</p>
+                                    <div className="flex items-center gap-3">
+                                        <kbd className="bg-white/30 text-white px-4 py-2 rounded-xl font-black shadow-lg border-2 border-white/20 text-base">F</kbd>
+                                        <span className="text-white font-bold text-base neon-text">Talk with Host</span>
                                     </div>
                                 </div>
                             </div>
@@ -2573,48 +2582,52 @@ const Scene = ({ currentLobby }) => {
             {/* Private Message Notification Popup */}
             {messageNotification && (
                 <div 
-                    className="fixed top-24 right-6 bg-gradient-to-br from-emerald-500 via-green-600 to-teal-600 text-white p-5 rounded-2xl shadow-2xl z-50 border-2 border-emerald-400/50 animate-in slide-in-from-right-5 duration-500 backdrop-blur-sm"
-                    style={{ maxWidth: '380px' }}
+                    className="card-3d fixed top-24 right-6 gradient-animated text-white p-6 rounded-3xl shadow-2xl z-50 border-3 border-emerald-400/60 neon-border animate-in bounce-in duration-500 backdrop-blur-xl overflow-hidden"
+                    style={{ maxWidth: '420px' }}
                 >
-                    <div className="flex items-start gap-4">
-                        <div className="flex-shrink-0 w-14 h-14 bg-white/25 rounded-2xl flex items-center justify-center text-2xl shadow-lg backdrop-blur-sm border border-white/30 animate-bounce">
+                    {/* Holographic Overlay */}
+                    <div className="absolute inset-0 holographic opacity-20 pointer-events-none"></div>
+                    <div className="absolute inset-0 shimmer opacity-10"></div>
+                    
+                    <div className="flex items-start gap-5 relative z-10">
+                        <div className="flex-shrink-0 w-16 h-16 bg-white/30 rounded-3xl flex items-center justify-center text-3xl shadow-2xl backdrop-blur-xl border-2 border-white/40 card-3d" style={{ animation: 'float-3d 2s ease-in-out infinite, pulse-glow 2s infinite' }}>
                             💬
                         </div>
                         <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-2 mb-1">
-                                <span className="w-2 h-2 bg-emerald-300 rounded-full animate-pulse"></span>
-                                <p className="font-bold text-sm text-emerald-100">
-                                    New Message
+                            <div className="flex items-center gap-2 mb-2">
+                                <span className="w-3 h-3 bg-emerald-300 rounded-full shadow-lg shadow-emerald-300/50" style={{ animation: 'pulse-glow 1.5s infinite' }}></span>
+                                <p className="font-black text-sm text-emerald-100 neon-text tracking-wide">
+                                    NEW MESSAGE
                                 </p>
                             </div>
-                            <p className="font-semibold text-base mb-2">
+                            <p className="font-black text-xl mb-3 neon-text">
                                 {messageNotification.from}
                             </p>
-                            <p className="text-white/95 text-sm line-clamp-2 leading-relaxed bg-white/10 px-3 py-2 rounded-lg backdrop-blur-sm">
+                            <p className="text-white text-base line-clamp-2 leading-relaxed bg-white/15 px-4 py-3 rounded-xl backdrop-blur-xl font-medium shadow-lg border border-white/20">
                                 {messageNotification.message}
                             </p>
                         </div>
                         <button
                             onClick={() => setMessageNotification(null)}
-                            className="flex-shrink-0 text-white/70 hover:text-white hover:bg-white/20 rounded-lg w-8 h-8 flex items-center justify-center text-xl leading-none transition-all hover:rotate-90 duration-300"
+                            className="flex-shrink-0 text-white/80 hover:text-white hover:bg-white/25 rounded-xl w-10 h-10 flex items-center justify-center text-2xl leading-none transition-all hover:rotate-90 duration-300 btn-3d border-2 border-white/20"
                         >
                             ×
                         </button>
                     </div>
-                    <div className="mt-3 pt-3 border-t border-white/20">
-                        <div className="flex gap-2">
+                    <div className="mt-4 pt-4 border-t-2 border-white/30 relative z-10">
+                        <div className="flex gap-3">
                             <button 
                                 onClick={() => {
                                     // TODO: Open chat with sender
                                     setMessageNotification(null);
                                 }}
-                                className="flex-1 bg-white/20 hover:bg-white/30 backdrop-blur-sm px-3 py-2 rounded-lg text-xs font-medium transition-all hover:scale-105 active:scale-95"
+                                className="flex-1 bg-white/25 hover:bg-white/35 backdrop-blur-xl px-4 py-3 rounded-xl text-sm font-black transition-all btn-3d border-2 border-white/30 neon-text shadow-xl"
                             >
-                                Reply
+                                Reply Now
                             </button>
                             <button 
                                 onClick={() => setMessageNotification(null)}
-                                className="px-3 py-2 rounded-lg text-xs font-medium text-white/70 hover:text-white hover:bg-white/10 transition-all"
+                                className="px-4 py-3 rounded-xl text-sm font-bold text-white/80 hover:text-white hover:bg-white/15 transition-all border-2 border-white/20"
                             >
                                 Dismiss
                             </button>

@@ -238,20 +238,24 @@ export default function PrivateChat({
     };
 
     return (
-        <Card className="fixed bottom-4 right-4 w-[420px] h-[600px] bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 backdrop-blur-xl shadow-2xl border border-slate-700/50 z-50 flex flex-col rounded-2xl overflow-hidden animate-in slide-in-from-right duration-300">
-            {/* Header */}
-            <div className="flex items-center justify-between p-5 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white shadow-lg">
-                <div className="flex items-center gap-3">
+        <Card className="card-3d fixed bottom-4 right-4 w-[440px] h-[650px] bg-gradient-to-br from-slate-900/95 via-indigo-900/95 to-purple-900/95 backdrop-blur-2xl shadow-2xl border-2 border-indigo-500/30 z-50 flex flex-col rounded-3xl overflow-hidden animate-in slide-in-from-right duration-500">
+            {/* Animated Background Gradient */}
+            <div className="absolute inset-0 bg-gradient-to-br from-indigo-600/10 via-purple-600/10 to-pink-600/10 opacity-50 holographic pointer-events-none"></div>
+            
+            {/* Header with 3D Effect */}
+            <div className="relative flex items-center justify-between p-6 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white shadow-2xl neon-border">
+                <div className="absolute inset-0 shimmer opacity-30"></div>
+                <div className="flex items-center gap-4 relative z-10">
                     <div className="relative">
-                        <div className="w-12 h-12 bg-gradient-to-br from-white/30 to-white/10 rounded-full flex items-center justify-center backdrop-blur-sm border border-white/20">
-                            <span className="text-2xl">👤</span>
+                        <div className="w-14 h-14 bg-gradient-to-br from-white/40 to-white/10 rounded-2xl flex items-center justify-center backdrop-blur-xl border-2 border-white/30 shadow-xl card-3d">
+                            <span className="text-3xl animate-bounce">👤</span>
                         </div>
-                        <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 rounded-full border-2 border-slate-900 animate-pulse"></div>
+                        <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full border-3 border-slate-900 shadow-lg" style={{ animation: 'pulse-glow 2s infinite' }}></div>
                     </div>
                     <div>
-                        <h3 className="font-bold text-lg">{targetUsername}</h3>
-                        <p className="text-xs text-white/80 flex items-center gap-1">
-                            <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                        <h3 className="font-black text-xl neon-text tracking-wide">{targetUsername}</h3>
+                        <p className="text-xs text-white/90 flex items-center gap-2 font-semibold">
+                            <span className="w-2 h-2 bg-green-400 rounded-full shadow-lg shadow-green-400/50" style={{ animation: 'pulse-glow 1.5s infinite' }}></span>
                             Online · Direct Message
                         </p>
                     </div>
@@ -260,22 +264,25 @@ export default function PrivateChat({
                     variant="ghost"
                     size="sm"
                     onClick={onClose}
-                    className="text-white hover:bg-white/20 rounded-full w-10 h-10 p-0 transition-all hover:rotate-90 duration-300"
+                    className="relative z-10 text-white hover:bg-white/20 rounded-full w-12 h-12 p-0 transition-all hover:rotate-90 duration-300 btn-3d border-2 border-white/20"
                 >
                     ✕
                 </Button>
             </div>
 
-            {/* Messages */}
-            <CardContent className="flex-1 overflow-y-auto p-5 space-y-4 bg-gradient-to-b from-slate-900/50 to-slate-800/50 scrollbar-thin scrollbar-thumb-slate-600 scrollbar-track-transparent">
+            {/* Messages with Glass Effect */}
+            <CardContent className="flex-1 overflow-y-auto p-6 space-y-5 glass-3d scrollbar-thin scrollbar-thumb-slate-600 scrollbar-track-transparent relative">
+                {/* Particle Background */}
+                <div className="absolute inset-0 particles-bg opacity-20 pointer-events-none"></div>
+                
                 {messages.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center h-full text-center space-y-3">
-                        <div className="w-20 h-20 bg-gradient-to-br from-indigo-500/20 to-purple-500/20 rounded-full flex items-center justify-center backdrop-blur-sm border border-indigo-500/30">
-                            <span className="text-4xl">💬</span>
+                    <div className="flex flex-col items-center justify-center h-full text-center space-y-4 relative z-10 animate-in bounce-in duration-500">
+                        <div className="w-24 h-24 bg-gradient-to-br from-indigo-500/30 to-purple-500/30 rounded-3xl flex items-center justify-center backdrop-blur-xl border-2 border-indigo-500/40 shadow-2xl card-3d holographic">
+                            <span className="text-5xl" style={{ animation: 'float-3d 3s ease-in-out infinite' }}>💬</span>
                         </div>
                         <div>
-                            <p className="text-slate-400 text-sm font-medium">No messages yet</p>
-                            <p className="text-slate-500 text-xs mt-1">Start a conversation with {targetUsername}</p>
+                            <p className="text-slate-300 text-base font-bold neon-text">No messages yet</p>
+                            <p className="text-slate-400 text-sm mt-2">Start a conversation with <span className="text-indigo-400 font-semibold">{targetUsername}</span></p>
                         </div>
                     </div>
                 ) : (
@@ -286,28 +293,29 @@ export default function PrivateChat({
                         return (
                             <div
                                 key={msg.id}
-                                className={`flex ${isMyMessage ? 'justify-end' : 'justify-start'} animate-in fade-in slide-in-from-bottom-2 duration-200`}
+                                className={`flex ${isMyMessage ? 'justify-end' : 'justify-start'} animate-in slide-in-from-bottom-2 duration-300 relative z-10`}
+                                style={{ animationDelay: `${index * 0.05}s` }}
                             >
-                                <div className={`flex items-end gap-2 max-w-[85%] ${isMyMessage ? 'flex-row-reverse' : 'flex-row'}`}>
+                                <div className={`flex items-end gap-3 max-w-[85%] ${isMyMessage ? 'flex-row-reverse' : 'flex-row'}`}>
                                     {!isMyMessage && isFirstInGroup && (
-                                        <div className="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-full flex items-center justify-center flex-shrink-0 text-white text-xs font-bold shadow-lg">
+                                        <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center flex-shrink-0 text-white text-sm font-black shadow-xl card-3d border-2 border-indigo-400/50">
                                             {targetUsername.charAt(0).toUpperCase()}
                                         </div>
                                     )}
-                                    {!isMyMessage && !isFirstInGroup && <div className="w-8"></div>}
+                                    {!isMyMessage && !isFirstInGroup && <div className="w-10"></div>}
                                     
                                     <div
-                                        className={`rounded-2xl px-4 py-3 shadow-lg backdrop-blur-sm transition-all hover:scale-[1.02] ${
+                                        className={`rounded-2xl px-5 py-3 shadow-2xl backdrop-blur-xl transition-all hover:scale-105 card-3d ${
                                             isMyMessage
-                                                ? 'bg-gradient-to-br from-indigo-600 to-purple-600 text-white rounded-br-md'
-                                                : 'bg-slate-700/80 text-slate-100 rounded-bl-md border border-slate-600/50'
+                                                ? 'bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 text-white rounded-br-sm border-2 border-indigo-400/50 neon-border'
+                                                : 'glass-3d text-slate-100 rounded-bl-sm border-2 border-slate-600/50'
                                         }`}
                                     >
-                                        <p className="text-sm whitespace-pre-wrap break-words leading-relaxed">
+                                        <p className="text-sm whitespace-pre-wrap break-words leading-relaxed font-medium">
                                             {msg.message}
                                         </p>
                                         <p
-                                            className={`text-[10px] mt-1.5 font-medium ${
+                                            className={`text-[10px] mt-2 font-bold ${
                                                 isMyMessage ? 'text-indigo-200' : 'text-slate-400'
                                             }`}
                                         >
@@ -325,9 +333,10 @@ export default function PrivateChat({
                 <div ref={messagesEndRef} />
             </CardContent>
 
-            {/* Input */}
-            <div className="p-4 bg-slate-800/80 backdrop-blur-sm border-t border-slate-700/50">
-                <div className="flex gap-2 items-end">
+            {/* Input with Neon Effect */}
+            <div className="p-5 glass-3d border-t-2 border-indigo-500/30 relative">
+                <div className="absolute inset-0 bg-gradient-to-t from-indigo-600/10 to-transparent pointer-events-none"></div>
+                <div className="flex gap-3 items-end relative z-10">
                     <div className="flex-1 relative">
                         <Input
                             value={newMessage}
@@ -335,29 +344,31 @@ export default function PrivateChat({
                             onKeyPress={handleKeyPress}
                             placeholder="Type your message..."
                             disabled={isLoading}
-                            className="bg-slate-700/50 border-slate-600/50 text-white placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 rounded-xl py-6 px-4 pr-12 transition-all"
+                            className="glass-3d border-2 border-indigo-500/30 text-white placeholder:text-slate-400 focus:border-indigo-400 focus:ring-4 focus:ring-indigo-500/30 rounded-2xl py-7 px-5 pr-14 transition-all font-medium shadow-xl neon-border"
                         />
-                        <div className="absolute right-3 bottom-3 text-slate-500 text-xs">
-                            {newMessage.length > 0 && `${newMessage.length}`}
-                        </div>
+                        {newMessage.length > 0 && (
+                            <div className="absolute right-4 bottom-4 text-indigo-400 text-xs font-bold bg-indigo-500/20 px-2 py-1 rounded-lg">
+                                {newMessage.length}
+                            </div>
+                        )}
                     </div>
                     <Button
                         onClick={sendMessage}
                         disabled={!newMessage.trim() || isLoading}
-                        className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white rounded-xl h-[52px] px-6 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:scale-105 active:scale-95"
+                        className="gradient-animated text-white rounded-2xl h-[56px] px-7 shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed transition-all btn-3d border-2 border-indigo-400/50 neon-border"
                     >
                         {isLoading ? (
                             <span className="flex items-center gap-2">
-                                <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+                                <span className="w-5 h-5 border-3 border-white/30 border-t-white rounded-full" style={{ animation: 'spin 1s linear infinite' }}></span>
                             </span>
                         ) : (
-                            <span className="text-lg">➤</span>
+                            <span className="text-xl">➤</span>
                         )}
                     </Button>
                 </div>
-                <p className="text-[10px] text-slate-500 mt-2 flex items-center gap-1">
-                    <kbd className="bg-slate-700/50 px-1.5 py-0.5 rounded text-slate-400">Enter</kbd> to send · 
-                    <kbd className="bg-slate-700/50 px-1.5 py-0.5 rounded text-slate-400">Shift+Enter</kbd> for new line
+                <p className="text-[10px] text-slate-400 mt-3 flex items-center gap-2 font-semibold">
+                    <kbd className="glass-3d px-2 py-1 rounded-lg text-indigo-300 border border-indigo-500/30">Enter</kbd> to send · 
+                    <kbd className="glass-3d px-2 py-1 rounded-lg text-indigo-300 border border-indigo-500/30">Shift+Enter</kbd> for new line
                 </p>
             </div>
         </Card>
