@@ -15,6 +15,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import TWEEN from '@tweenjs/tween.js';
 import DynamicChatService from './DynamicChatService';
+import PrivateChat from './PrivateChat';
 import summaryMetadata from '@/public/context/summary_metadata_with_vercel_urls.json';
 import ReactMarkdown from 'react-markdown';
 // import ttsService from './edgeTTSService'; // Removed TTS to fix WebSocket errors
@@ -109,6 +110,12 @@ const Scene = ({ currentLobby }) => {
 
     // Add loading state management to prevent duplicate requests
     const loadingAvatarsRef = useRef(new Set<string>()); // Track which avatars are currently loading
+
+    // Private chat state
+    const [privateChatTarget, setPrivateChatTarget] = useState<{
+        profileId: string;
+        username: string;
+    } | null>(null);
 
     // ============================================
     // MOVE THESE FUNCTIONS OUTSIDE init()
@@ -743,14 +750,28 @@ const Scene = ({ currentLobby }) => {
             playAnimation(ANIMATION_JUMP);
         }
 
-        if (event.key.toLowerCase() === 'f' && isNearNPC && !isChatting) {
+        if (event.key.toLowerCase() === 'f' && isNearNPC && !isChatting && !privateChatTarget) {
             console.log('Starting chat...');
             startUniversalChat();
+        }
+
+        // Handle G key for private messaging
+        if (event.key.toLowerCase() === 'g' && isNearNPC && !isChatting && !privateChatTarget) {
+            if (nearestAvatarRef.current?.type === 'digital-twin') {
+                const { profile } = nearestAvatarRef.current.data;
+                console.log('Opening private chat with:', profile.username);
+                setPrivateChatTarget({
+                    profileId: profile.id,
+                    username: profile.username
+                });
+            }
         }
 
         if (event.key === 'Escape') {
             if (isChatting) {
                 endChat();
+            } else if (privateChatTarget) {
+                setPrivateChatTarget(null);
             } else {
                 // Return to lobby selection
                 showLobbySelection();
@@ -1972,9 +1993,25 @@ const Scene = ({ currentLobby }) => {
 
 
             {/* Interaction Prompt */}
-            {isNearNPC && !isChatting && (
-                <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black bg-opacity-75 text-white px-4 py-2 rounded z-10">
-                    Press F to talk
+            {isNearNPC && !isChatting && !privateChatTarget && (
+                <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black/90 text-white px-6 py-4 rounded-lg z-10 border-2 border-white/20">
+                    {nearestAvatarRef.current?.type === 'digital-twin' ? (
+                        <div className="text-center space-y-2">
+                            <p className="font-semibold text-lg">
+                                Near {nearestAvatarRef.current.data.profile.username}
+                            </p>
+                            <div className="flex gap-3">
+                                <div className="bg-blue-500/20 px-3 py-1 rounded">
+                                    <span className="text-blue-300">F</span> - AI Chat
+                                </div>
+                                <div className="bg-green-500/20 px-3 py-1 rounded">
+                                    <span className="text-green-300">G</span> - Private Message
+                                </div>
+                            </div>
+                        </div>
+                    ) : (
+                        <div>Press <span className="font-bold bg-white/20 px-2 py-1 rounded">F</span> to talk with host</div>
+                    )}
                 </div>
             )}
 
@@ -2346,6 +2383,18 @@ const Scene = ({ currentLobby }) => {
                     <div>Geometries: {memoryStats.rendererInfo.geometries || 0}</div>
                     <div>Textures: {memoryStats.rendererInfo.textures || 0}</div>
                 </div>
+            )}
+
+            {/* Private Chat Window */}
+            {privateChatTarget && profile && currentLobby && (
+                <PrivateChat
+                    myProfileId={profile.id}
+                    myUsername={profile.username}
+                    targetProfileId={privateChatTarget.profileId}
+                    targetUsername={privateChatTarget.username}
+                    lobbyId={currentLobby.lobbyId}
+                    onClose={() => setPrivateChatTarget(null)}
+                />
             )}
 
         </div>

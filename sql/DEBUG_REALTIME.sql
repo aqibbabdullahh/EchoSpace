@@ -41,10 +41,7 @@ SELECT
     tablename,
     policyname,
     cmd as command,
-    CASE 
-        WHEN qual = 'true'::text::pg_node_tree THEN '✅ Permissive (true)'
-        ELSE '⚠️ Restrictive'
-    END as policy_type
+    '✅ Policy exists' as status
 FROM pg_policies
 WHERE tablename IN ('profiles', 'avatar_states', 'room_messages')
 ORDER BY tablename, policyname;
