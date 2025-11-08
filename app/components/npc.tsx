@@ -574,6 +574,8 @@ const Scene = ({ currentLobby }) => {
     //     });
     // }, []);
 
+        };
+    }, []);
 
     // Cleanup on component unmount only
     useEffect(() => {
