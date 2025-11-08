@@ -146,7 +146,7 @@ const ProfileCreator = ({ onComplete, editingProfile, isEditing = false }: Profi
     if (profile && !isEditing) {
         return (
             <div className="w-full max-w-md mx-auto px-4 py-16">
-                <Card className="border-0 bg-white/5 backdrop-blur-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-700" style={{
+                <Card className="border-0 bg-gray-900/95 shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-700" style={{
                     boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.1)',
                     borderRadius: '24px'
                 }}>
@@ -213,7 +213,7 @@ const ProfileCreator = ({ onComplete, editingProfile, isEditing = false }: Profi
             </div>
 
             {/* Main content card */}
-            <Card className="border-0 bg-white/5 backdrop-blur-2xl shadow-2xl overflow-hidden" style={{
+                            <Card className="border-0 bg-gray-900/95 shadow-2xl overflow-hidden" style={{
                 boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.1)',
                 borderRadius: '24px'
             }}>
@@ -289,9 +289,8 @@ const ProfileCreator = ({ onComplete, editingProfile, isEditing = false }: Profi
                                         className={`group relative p-3 rounded-2xl transition-all duration-300 ${
                                             selectedAvatar === avatar.model
                                                 ? 'bg-gradient-to-br from-purple-600/30 to-indigo-600/30 ring-2 ring-purple-500 shadow-lg shadow-purple-500/30'
-                                                : 'bg-white/5 hover:bg-white/10 border border-white/10'
+                                                : 'bg-gray-800 hover:bg-gray-700 border border-gray-700'
                                         }`}
-                                        style={{ backdropFilter: 'blur(20px)' }}
                                     >
                                         <div className="aspect-square mb-2 rounded-xl overflow-hidden">
                                             <img 
@@ -321,7 +320,7 @@ const ProfileCreator = ({ onComplete, editingProfile, isEditing = false }: Profi
                             <Button
                                 onClick={() => setStep(1)}
                                 variant="outline"
-                                className="flex-1 h-14 bg-white/5 hover:bg-white/10 border border-white/20 text-white rounded-xl transition-all duration-200"
+                                className="flex-1 h-14 bg-gray-800 hover:bg-gray-700 border border-gray-700 text-white rounded-xl transition-all duration-200"
                                 style={{ 
                                     fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif"
                                 }}
@@ -366,9 +365,8 @@ const ProfileCreator = ({ onComplete, editingProfile, isEditing = false }: Profi
                                             (template.label === 'Custom' && isCustomPersonality) ||
                                             (!isCustomPersonality && personality === template.value)
                                                 ? 'bg-gradient-to-r from-purple-600/30 to-indigo-600/30 ring-2 ring-purple-500'
-                                                : 'bg-white/5 hover:bg-white/10 border border-white/10'
+                                                : 'bg-gray-800 hover:bg-gray-700 border border-gray-700'
                                         }`}
-                                        style={{ backdropFilter: 'blur(20px)' }}
                                     >
                                         <div className="text-white text-sm font-semibold mb-1" style={{ 
                                             fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif"
@@ -390,10 +388,9 @@ const ProfileCreator = ({ onComplete, editingProfile, isEditing = false }: Profi
                                     placeholder="Describe your personality..."
                                     value={personality}
                                     onChange={(e) => setPersonality(e.target.value)}
-                                    className="mt-3 p-4 bg-white/10 border border-white/20 rounded-xl text-white placeholder:text-gray-500 focus:bg-white/15 focus:border-purple-500/50 focus:ring-2 focus:ring-purple-500/20 transition-all duration-200"
+                                    className="mt-3 p-4 bg-gray-900/90 border border-gray-700 rounded-xl text-white placeholder:text-gray-500 focus:bg-gray-900 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/30 transition-all duration-200"
                                     style={{ 
-                                        fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif",
-                                        backdropFilter: 'blur(20px)'
+                                        fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif"
                                     }}
                                     rows={3}
                                     maxLength={10000}
@@ -421,11 +418,10 @@ const ProfileCreator = ({ onComplete, editingProfile, isEditing = false }: Profi
                                         className={`p-3 text-sm rounded-xl transition-all duration-200 font-medium ${
                                             interests.includes(interest)
                                                 ? 'bg-gradient-to-r from-purple-600/30 to-indigo-600/30 ring-2 ring-purple-500 text-white'
-                                                : 'bg-white/5 hover:bg-white/10 border border-white/10 text-gray-400'
+                                                : 'bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-400'
                                         }`}
                                         style={{ 
-                                            fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif",
-                                            backdropFilter: 'blur(20px)'
+                                            fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif"
                                         }}
                                         disabled={!interests.includes(interest) && interests.length >= 5}
                                     >
@@ -445,10 +441,9 @@ const ProfileCreator = ({ onComplete, editingProfile, isEditing = false }: Profi
                                 placeholder="Tell others about yourself..."
                                 value={bio}
                                 onChange={(e) => setBio(e.target.value)}
-                                className="p-4 bg-white/10 border border-white/20 rounded-xl text-white placeholder:text-gray-500 focus:bg-white/15 focus:border-purple-500/50 focus:ring-2 focus:ring-purple-500/20 transition-all duration-200"
+                                className="p-4 bg-gray-900/90 border border-gray-700 rounded-xl text-white placeholder:text-gray-500 focus:bg-gray-900 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/30 transition-all duration-200"
                                 style={{ 
-                                    fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif",
-                                    backdropFilter: 'blur(20px)'
+                                    fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif"
                                 }}
                                 rows={5}
                                 maxLength={100000}
@@ -464,7 +459,7 @@ const ProfileCreator = ({ onComplete, editingProfile, isEditing = false }: Profi
                             <Button
                                 onClick={() => setStep(2)}
                                 variant="outline"
-                                className="flex-1 h-14 bg-white/5 hover:bg-white/10 border border-white/20 text-white rounded-xl transition-all duration-200"
+                                className="flex-1 h-14 bg-gray-800 hover:bg-gray-700 border border-gray-700 text-white rounded-xl transition-all duration-200"
                                 style={{ 
                                     fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif"
                                 }}
