@@ -1,11 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=Exo+2:wght@300;400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 body {
-  font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+  font-family: 'Space Grotesk', 'Inter', 'Segoe UI', sans-serif;
+  background: 
+    radial-gradient(ellipse at top, rgba(16, 185, 129, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at bottom, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+    linear-gradient(135deg, #0a0118 0%, #1a0b2e 25%, #16213e 50%, #0f1419 75%, #0a0118 100%);
+  background-attachment: fixed;
   overflow-x: hidden;
+  color: #e2e8f0;
 }
 
 @layer base {

@@ -145,22 +145,33 @@ const ProfileCreator = ({ onComplete, editingProfile, isEditing = false }: Profi
     // If profile exists and we're not editing, show welcome back
     if (profile && !isEditing) {
         return (
-            <Card className="w-full max-w-md mx-auto card-3d glass-3d neon-border relative overflow-hidden">
+            <Card className="w-full max-w-md mx-auto card-3d glass-3d neon-border relative overflow-hidden" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                 {/* Holographic overlay */}
                 <div className="holographic absolute inset-0 pointer-events-none opacity-30 rounded-lg" />
                 
                 <CardContent className="p-8 text-center relative z-10 bounce-in">
                     <div className="float-3d mb-6">
-                        <h2 className="text-3xl font-bold neon-text bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent mb-2">
+                        <h2 className="text-4xl font-black tracking-tight mb-2" style={{ 
+                            fontFamily: "'Orbitron', sans-serif",
+                            background: 'linear-gradient(135deg, #00f5ff 0%, #a78bfa 50%, #ec4899 100%)',
+                            WebkitBackgroundClip: 'text',
+                            WebkitTextFillColor: 'transparent'
+                        }}>
                             Welcome back, {profile.username}! 👋
                         </h2>
                     </div>
-                    <p className="text-lg font-medium bg-gradient-to-r from-blue-300 to-purple-300 bg-clip-text text-transparent mb-6">
+                    <p className="text-xl font-semibold mb-6" style={{ 
+                        fontFamily: "'Exo 2', sans-serif",
+                        background: 'linear-gradient(90deg, #60efff 0%, #c084fc 100%)',
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent'
+                    }}>
                         ✨ Your digital twin is ready to explore the metaverse.
                     </p>
                     <Button 
                         onClick={onComplete} 
-                        className="w-full btn-3d gradient-animated neon-border h-14 text-lg font-bold"
+                        className="w-full btn-3d gradient-animated neon-border h-14 text-lg font-black tracking-wide"
+                        style={{ fontFamily: "'Orbitron', sans-serif" }}
                     >
                         🚀 Enter YNGO
                     </Button>
@@ -170,15 +181,27 @@ const ProfileCreator = ({ onComplete, editingProfile, isEditing = false }: Profi
     }
 
     return (
-        <Card className="w-full max-w-2xl mx-auto card-3d glass-3d neon-border max-h-[90vh] overflow-hidden flex flex-col relative">
+        <Card className="w-full max-w-2xl mx-auto card-3d glass-3d neon-border max-h-[90vh] overflow-hidden flex flex-col relative" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
             {/* Holographic overlay */}
             <div className="holographic absolute inset-0 pointer-events-none opacity-30 rounded-lg" />
             
             <CardHeader className="flex-shrink-0 relative z-10">
-                <CardTitle className="text-3xl text-center neon-text bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent font-bold mb-2">
+                <CardTitle className="text-4xl text-center font-black tracking-tight" style={{ 
+                    fontFamily: "'Orbitron', sans-serif",
+                    background: 'linear-gradient(135deg, #00f5ff 0%, #a78bfa 25%, #ec4899 50%, #fbbf24 75%, #00f5ff 100%)',
+                    backgroundSize: '200% auto',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    animation: 'gradient-shift 3s linear infinite'
+                }}>
                     {isEditing ? '✨ Edit Your Profile' : '🌟 Create Your Digital Twin'}
                 </CardTitle>
-                <p className="text-center text-lg font-medium bg-gradient-to-r from-blue-300 to-purple-300 bg-clip-text text-transparent">
+                <p className="text-center text-lg font-semibold mt-2" style={{ 
+                    fontFamily: "'Exo 2', sans-serif",
+                    background: 'linear-gradient(90deg, #60efff 0%, #c084fc 50%, #f472b6 100%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent'
+                }}>
                     {isEditing
                         ? 'Update your avatar and personality settings'
                         : 'Your avatar will persist in the metaverse even when you\'re offline!'
@@ -187,19 +210,22 @@ const ProfileCreator = ({ onComplete, editingProfile, isEditing = false }: Profi
                 <div className="flex justify-center gap-3 mt-6">
                     <Badge 
                         variant={step === 1 ? "default" : "outline"}
-                        className={step === 1 ? "card-3d gradient-animated neon-border px-4 py-2" : "glass-3d border-cyan-500/50 px-4 py-2"}
+                        className={step === 1 ? "card-3d gradient-animated neon-border px-4 py-2 font-bold" : "glass-3d border-cyan-500/50 px-4 py-2 font-semibold"}
+                        style={{ fontFamily: "'Orbitron', sans-serif" }}
                     >
                         <span className="neon-text">1. Identity</span>
                     </Badge>
                     <Badge 
                         variant={step === 2 ? "default" : "outline"}
-                        className={step === 2 ? "card-3d gradient-animated neon-border px-4 py-2" : "glass-3d border-purple-500/50 px-4 py-2"}
+                        className={step === 2 ? "card-3d gradient-animated neon-border px-4 py-2 font-bold" : "glass-3d border-purple-500/50 px-4 py-2 font-semibold"}
+                        style={{ fontFamily: "'Orbitron', sans-serif" }}
                     >
                         <span className="neon-text">2. Avatar</span>
                     </Badge>
                     <Badge 
                         variant={step === 3 ? "default" : "outline"}
-                        className={step === 3 ? "card-3d gradient-animated neon-border px-4 py-2" : "glass-3d border-pink-500/50 px-4 py-2"}
+                        className={step === 3 ? "card-3d gradient-animated neon-border px-4 py-2 font-bold" : "glass-3d border-pink-500/50 px-4 py-2 font-semibold"}
+                        style={{ fontFamily: "'Orbitron', sans-serif" }}
                     >
                         <span className="neon-text">3. Personality</span>
                     </Badge>
