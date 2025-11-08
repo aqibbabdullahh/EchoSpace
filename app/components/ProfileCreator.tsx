@@ -189,7 +189,6 @@ const ProfileCreator = ({ onComplete, editingProfile, isEditing = false }: Profi
                 <button
                     onClick={() => {
                         onComplete();
-                        showLobbySelection();
                     }}
                     className="mb-6 flex items-center gap-2 text-gray-400 hover:text-white transition-all duration-200 group"
                     style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif" }}
