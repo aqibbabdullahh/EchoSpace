@@ -18,7 +18,7 @@ SELECT
     tablename,
     indexname,
     indexdef
-FROM pg_indexes
+FROM pg_indexes    
 WHERE tablename = 'private_messages'
     AND indexname LIKE '%lobby%'
 ORDER BY indexname;

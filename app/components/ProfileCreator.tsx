@@ -145,16 +145,24 @@ const ProfileCreator = ({ onComplete, editingProfile, isEditing = false }: Profi
     // If profile exists and we're not editing, show welcome back
     if (profile && !isEditing) {
         return (
-            <Card className="w-full max-w-md mx-auto bg-gray-800 border-gray-600">
-                <CardContent className="p-6 text-center">
-                    <h2 className="text-2xl font-bold text-white mb-4">
-                        Welcome back, {profile.username}!
-                    </h2>
-                    <p className="text-gray-300 mb-4">
-                        Your digital twin is ready to explore the metaverse.
+            <Card className="w-full max-w-md mx-auto card-3d glass-3d neon-border relative overflow-hidden">
+                {/* Holographic overlay */}
+                <div className="holographic absolute inset-0 pointer-events-none opacity-30 rounded-lg" />
+                
+                <CardContent className="p-8 text-center relative z-10 bounce-in">
+                    <div className="float-3d mb-6">
+                        <h2 className="text-3xl font-bold neon-text bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent mb-2">
+                            Welcome back, {profile.username}! 👋
+                        </h2>
+                    </div>
+                    <p className="text-lg font-medium bg-gradient-to-r from-blue-300 to-purple-300 bg-clip-text text-transparent mb-6">
+                        ✨ Your digital twin is ready to explore the metaverse.
                     </p>
-                    <Button onClick={onComplete} className="w-full">
-                        Enter YNGO
+                    <Button 
+                        onClick={onComplete} 
+                        className="w-full btn-3d gradient-animated neon-border h-14 text-lg font-bold"
+                    >
+                        🚀 Enter YNGO
                     </Button>
                 </CardContent>
             </Card>
@@ -162,39 +170,59 @@ const ProfileCreator = ({ onComplete, editingProfile, isEditing = false }: Profi
     }
 
     return (
-        <Card className="w-full max-w-2xl mx-auto bg-gray-800 border-gray-600 max-h-[90vh] overflow-hidden flex flex-col">
-            <CardHeader className="flex-shrink-0">
-                <CardTitle className="text-2xl text-center text-white">
-                    {isEditing ? 'Edit Your Profile' : 'Create Your Digital Twin'}
+        <Card className="w-full max-w-2xl mx-auto card-3d glass-3d neon-border max-h-[90vh] overflow-hidden flex flex-col relative">
+            {/* Holographic overlay */}
+            <div className="holographic absolute inset-0 pointer-events-none opacity-30 rounded-lg" />
+            
+            <CardHeader className="flex-shrink-0 relative z-10">
+                <CardTitle className="text-3xl text-center neon-text bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent font-bold mb-2">
+                    {isEditing ? '✨ Edit Your Profile' : '🌟 Create Your Digital Twin'}
                 </CardTitle>
-                <p className="text-center text-gray-300">
+                <p className="text-center text-lg font-medium bg-gradient-to-r from-blue-300 to-purple-300 bg-clip-text text-transparent">
                     {isEditing
                         ? 'Update your avatar and personality settings'
                         : 'Your avatar will persist in the metaverse even when you\'re offline!'
                     }
                 </p>
-                <div className="flex justify-center gap-2 mt-4">
-                    <Badge variant={step === 1 ? "default" : "outline"}>1. Identity</Badge>
-                    <Badge variant={step === 2 ? "default" : "outline"}>2. Avatar</Badge>
-                    <Badge variant={step === 3 ? "default" : "outline"}>3. Personality</Badge>
+                <div className="flex justify-center gap-3 mt-6">
+                    <Badge 
+                        variant={step === 1 ? "default" : "outline"}
+                        className={step === 1 ? "card-3d gradient-animated neon-border px-4 py-2" : "glass-3d border-cyan-500/50 px-4 py-2"}
+                    >
+                        <span className="neon-text">1. Identity</span>
+                    </Badge>
+                    <Badge 
+                        variant={step === 2 ? "default" : "outline"}
+                        className={step === 2 ? "card-3d gradient-animated neon-border px-4 py-2" : "glass-3d border-purple-500/50 px-4 py-2"}
+                    >
+                        <span className="neon-text">2. Avatar</span>
+                    </Badge>
+                    <Badge 
+                        variant={step === 3 ? "default" : "outline"}
+                        className={step === 3 ? "card-3d gradient-animated neon-border px-4 py-2" : "glass-3d border-pink-500/50 px-4 py-2"}
+                    >
+                        <span className="neon-text">3. Personality</span>
+                    </Badge>
                 </div>
             </CardHeader>
-            <CardContent className="p-6 flex-1 overflow-y-auto">
+            <CardContent className="p-6 flex-1 overflow-y-auto relative z-10">
                 {/* Step 1: Username */}
                 {step === 1 && (
-                    <div className="space-y-6">
-                        <div>
-                            <label className="text-white mb-2 block">Choose Your Username</label>
+                    <div className="space-y-6 bounce-in">
+                        <div className="card-3d glass-3d p-6 neon-border">
+                            <label className="text-lg font-semibold bg-gradient-to-r from-cyan-300 to-blue-300 bg-clip-text text-transparent mb-3 block">
+                                ✨ Choose Your Username
+                            </label>
                             <Input
                                 type="text"
                                 placeholder="Enter username..."
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
-                                className="bg-gray-700 border-gray-600 text-white"
+                                className="glass-3d neon-border text-white text-lg font-medium placeholder:text-cyan-300/50 h-14"
                                 maxLength={20}
                             />
-                            <p className="text-xs text-gray-400 mt-1">
-                                This is how others will know you in the metaverse
+                            <p className="text-sm text-cyan-200/70 mt-3 font-medium">
+                                💫 This is how others will know you in the metaverse
                             </p>
                         </div>
 
@@ -202,54 +230,58 @@ const ProfileCreator = ({ onComplete, editingProfile, isEditing = false }: Profi
 
                         <Button
                             onClick={() => username.trim() && setStep(2)}
-                            className="w-full bg-blue-600 hover:bg-blue-700"
+                            className="w-full btn-3d gradient-animated neon-border h-14 text-lg font-bold"
                             disabled={!username.trim()}
                         >
-                            Next: Choose Avatar
+                            Next: Choose Avatar →
                         </Button>
                     </div>
                 )}
 
                 {/* Step 2: Avatar Selection */}
                 {step === 2 && (
-                    <div className="space-y-6">
-                        <div>
-                            <label className="text-white mb-2 block">Select Your Avatar</label>
+                    <div className="space-y-6 bounce-in">
+                        <div className="card-3d glass-3d p-6 neon-border">
+                            <label className="text-lg font-semibold bg-gradient-to-r from-purple-300 to-pink-300 bg-clip-text text-transparent mb-4 block">
+                                👤 Select Your Avatar
+                            </label>
                             <div className="grid grid-cols-4 gap-4">
                                 {avatarOptions.map(avatar => (
                                     <button
                                         key={avatar.id}
                                         onClick={() => setSelectedAvatar(avatar.model)}
-                                        className={`p-4 rounded-lg border-2 transition-all ${
+                                        className={`p-4 rounded-lg border-2 transition-all duration-300 card-hover-3d ${
                                             selectedAvatar === avatar.model
-                                                ? 'border-blue-500 bg-blue-500/20'
-                                                : 'border-gray-600 bg-gray-700 hover:border-gray-500'
+                                                ? 'neon-border gradient-animated scale-110'
+                                                : 'border-cyan-500/30 glass-3d hover:border-cyan-400/60'
                                         }`}
                                     >
-                                        <img 
-                                            src={avatar.preview} 
-                                            alt={avatar.name}
-                                            className="w-16 h-16 object-cover rounded"
-                                        />
-                                        <div className="text-xs text-gray-300">{avatar.name}</div>
+                                        <div className={selectedAvatar === avatar.model ? 'float-3d' : ''}>
+                                            <img 
+                                                src={avatar.preview} 
+                                                alt={avatar.name}
+                                                className="w-16 h-16 object-cover rounded-lg mb-2 mx-auto"
+                                            />
+                                            <div className="text-xs font-bold neon-text">{avatar.name}</div>
+                                        </div>
                                     </button>
                                 ))}
                             </div>
                         </div>
 
-                        <div className="flex gap-2">
+                        <div className="flex gap-3">
                             <Button
                                 onClick={() => setStep(1)}
                                 variant="outline"
-                                className="flex-1"
+                                className="flex-1 glass-3d border-cyan-500/50 hover:border-cyan-400 h-12 text-base font-semibold"
                             >
-                                Back
+                                ← Back
                             </Button>
                             <Button
                                 onClick={() => setStep(3)}
-                                className="flex-1 bg-blue-600 hover:bg-blue-700"
+                                className="flex-1 btn-3d gradient-animated neon-border h-12 text-base font-bold"
                             >
-                                Next: Personality
+                                Next: Personality →
                             </Button>
                         </div>
                     </div>
@@ -257,9 +289,11 @@ const ProfileCreator = ({ onComplete, editingProfile, isEditing = false }: Profi
 
                 {/* Step 3: Personality */}
                 {step === 3 && (
-                    <div className="space-y-6">
-                        <div>
-                            <label className="text-white mb-2 block">Personality</label>
+                    <div className="space-y-6 bounce-in">
+                        <div className="card-3d glass-3d p-6 neon-border">
+                            <label className="text-lg font-semibold bg-gradient-to-r from-pink-300 to-orange-300 bg-clip-text text-transparent mb-3 block">
+                                🎭 Personality
+                            </label>
                             <div className="space-y-2 mb-3">
                                 {personalityTemplates.map((template) => (
                                     <button
@@ -267,22 +301,21 @@ const ProfileCreator = ({ onComplete, editingProfile, isEditing = false }: Profi
                                         onClick={() => {
                                             if (template.label === 'Custom') {
                                                 setIsCustomPersonality(true);
-                                                // Keep current personality value when switching to custom
                                             } else {
                                                 setIsCustomPersonality(false);
                                                 setPersonality(template.value);
                                             }
                                         }}
-                                        className={`w-full text-left p-2 rounded border ${
+                                        className={`w-full text-left p-3 rounded-lg border-2 transition-all duration-300 card-hover-3d ${
                                             (template.label === 'Custom' && isCustomPersonality) ||
                                             (!isCustomPersonality && personality === template.value)
-                                                ? 'border-blue-500 bg-blue-500/20'
-                                                : 'border-gray-600 bg-gray-700'
+                                                ? 'neon-border gradient-animated'
+                                                : 'border-purple-500/30 glass-3d hover:border-purple-400/60'
                                         }`}
                                     >
-                                        <div className="text-white text-sm">{template.label}</div>
+                                        <div className="text-white text-sm font-bold neon-text">{template.label}</div>
                                         {template.value && (
-                                            <div className="text-xs text-gray-400">{template.value}</div>
+                                            <div className="text-xs text-cyan-200/70 mt-1">{template.value}</div>
                                         )}
                                     </button>
                                 ))}
@@ -291,15 +324,17 @@ const ProfileCreator = ({ onComplete, editingProfile, isEditing = false }: Profi
                                 placeholder="Describe your personality..."
                                 value={personality}
                                 onChange={(e) => setPersonality(e.target.value)}
-                                className="bg-gray-700 border-gray-600 text-white"
+                                className="glass-3d neon-border text-white font-medium placeholder:text-purple-300/50"
                                 rows={3}
                                 maxLength={10000}
                             />
-                            <p className="text-xs text-gray-400 mt-1">{personality.length}/10,000 characters</p>
+                            <p className="text-xs text-cyan-200/70 mt-2 font-medium">{personality.length}/10,000 characters</p>
                         </div>
 
-                        <div>
-                            <label className="text-white mb-2 block">Interests (select up to 5)</label>
+                        <div className="card-3d glass-3d p-6 neon-border">
+                            <label className="text-lg font-semibold bg-gradient-to-r from-green-300 to-cyan-300 bg-clip-text text-transparent mb-3 block">
+                                ❤️ Interests (select up to 5)
+                            </label>
                             <div className="grid grid-cols-3 gap-2">
                                 {interestOptions.map((interest) => (
                                     <button
@@ -311,10 +346,10 @@ const ProfileCreator = ({ onComplete, editingProfile, isEditing = false }: Profi
                                                 setInterests([...interests, interest]);
                                             }
                                         }}
-                                        className={`p-2 text-xs rounded border ${
+                                        className={`p-2 text-xs rounded-lg border-2 transition-all duration-300 font-semibold ${
                                             interests.includes(interest)
-                                                ? 'border-blue-500 bg-blue-500/20 text-white'
-                                                : 'border-gray-600 bg-gray-700 text-gray-300'
+                                                ? 'neon-border gradient-animated scale-105'
+                                                : 'border-cyan-500/30 glass-3d hover:border-cyan-400/60 text-gray-300'
                                         }`}
                                         disabled={!interests.includes(interest) && interests.length >= 5}
                                     >
@@ -324,35 +359,37 @@ const ProfileCreator = ({ onComplete, editingProfile, isEditing = false }: Profi
                             </div>
                         </div>
 
-                        <div>
-                            <label className="text-white mb-2 block">Background</label>
+                        <div className="card-3d glass-3d p-6 neon-border">
+                            <label className="text-lg font-semibold bg-gradient-to-r from-blue-300 to-purple-300 bg-clip-text text-transparent mb-3 block">
+                                📝 Background
+                            </label>
                             <Textarea
                                 placeholder="Tell others about yourself... (feel free to copy and paste your resume)"
                                 value={bio}
                                 onChange={(e) => setBio(e.target.value)}
-                                className="bg-gray-700 border-gray-600 text-white"
+                                className="glass-3d neon-border text-white font-medium placeholder:text-blue-300/50"
                                 rows={6}
                                 maxLength={100000}
                             />
-                            <p className="text-xs text-gray-400 mt-1">{bio.length}/100000</p>
+                            <p className="text-xs text-cyan-200/70 mt-2 font-medium">{bio.length}/100,000</p>
                         </div>
 
-                        <div className="flex gap-2">
+                        <div className="flex gap-3">
                             <Button
                                 onClick={() => setStep(2)}
                                 variant="outline"
-                                className="flex-1"
+                                className="flex-1 glass-3d border-purple-500/50 hover:border-purple-400 h-12 text-base font-semibold"
                             >
-                                Back
+                                ← Back
                             </Button>
                             <Button
                                 onClick={handleCreateProfile}
                                 disabled={isCreating}
-                                className="flex-1 bg-green-600 hover:bg-green-700"
+                                className="flex-1 btn-3d gradient-animated neon-border h-12 text-base font-bold"
                             >
                                 {isCreating
-                                    ? (isEditing ? 'Updating...' : 'Creating...')
-                                    : (isEditing ? 'Update Profile' : 'Create Digital Twin')
+                                    ? (isEditing ? '⏳ Updating...' : '⏳ Creating...')
+                                    : (isEditing ? '✅ Update Profile' : '🚀 Create Digital Twin')
                                 }
                             </Button>
                         </div>
