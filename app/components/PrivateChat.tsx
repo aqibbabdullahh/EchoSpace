@@ -14,6 +14,7 @@ interface PrivateMessage {
     message: string;
     is_read: boolean;
     created_at: string;
+    lobby_id: string;  // Messages are scoped to specific lobbies
 }
 
 interface PrivateChatProps {
@@ -60,16 +61,17 @@ export default function PrivateChat({
                 supabase.removeChannel(subscriptionRef.current.to);
             }
         };
-    }, [myProfileId, targetProfileId]);
+    }, [myProfileId, targetProfileId, lobbyId]);  // Re-subscribe when lobby changes
 
     const loadMessages = async () => {
         try {
-            console.log('📥 Loading messages between', myProfileId, 'and', targetProfileId);
+            console.log('📥 Loading messages between', myProfileId, 'and', targetProfileId, 'in lobby', lobbyId);
             
-            // Load messages in both directions
+            // Load messages in both directions FOR THIS LOBBY ONLY
             const { data, error } = await supabase
                 .from('private_messages')
                 .select('*')
+                .eq('lobby_id', lobbyId)  // FILTER BY CURRENT LOBBY
                 .or(`and(from_profile_id.eq.${myProfileId},to_profile_id.eq.${targetProfileId}),and(from_profile_id.eq.${targetProfileId},to_profile_id.eq.${myProfileId})`)
                 .order('created_at', { ascending: true });
 
@@ -78,7 +80,7 @@ export default function PrivateChat({
                 return;
             }
             
-            console.log('✅ Loaded', data?.length || 0, 'messages');
+            console.log('✅ Loaded', data?.length || 0, 'messages for lobby', lobbyId);
             if (data) {
                 setMessages(data);
                 // Mark messages as read
@@ -94,6 +96,7 @@ export default function PrivateChat({
             await supabase
                 .from('private_messages')
                 .update({ is_read: true })
+                .eq('lobby_id', lobbyId)  // ONLY IN CURRENT LOBBY
                 .eq('to_profile_id', myProfileId)
                 .eq('from_profile_id', targetProfileId)
                 .eq('is_read', false);
@@ -103,11 +106,11 @@ export default function PrivateChat({
     };
 
     const setupRealtimeSubscription = () => {
-        console.log('🔌 Setting up realtime subscriptions between', myProfileId, 'and', targetProfileId);
+        console.log('🔌 Setting up realtime subscriptions between', myProfileId, 'and', targetProfileId, 'for lobby', lobbyId);
         
-        // Subscribe to messages FROM target user TO me
+        // Subscribe to messages FROM target user TO me IN THIS LOBBY
         const channelFrom = supabase
-            .channel(`private_chat_from:${targetProfileId}:${myProfileId}`, {
+            .channel(`private_chat_from:${targetProfileId}:${myProfileId}:${lobbyId}`, {
                 config: {
                     broadcast: { self: false },
                     presence: { key: '' }
@@ -123,9 +126,9 @@ export default function PrivateChat({
                 },
                 (payload) => {
                     const newMsg = payload.new as PrivateMessage;
-                    // Only add if it's for me
-                    if (newMsg.to_profile_id === myProfileId) {
-                        console.log('📩 Received message from', targetProfileId, ':', newMsg);
+                    // Only add if it's for me AND in this lobby
+                    if (newMsg.to_profile_id === myProfileId && newMsg.lobby_id === lobbyId) {
+                        console.log('📩 Received message from', targetProfileId, 'in lobby', lobbyId, ':', newMsg);
                         setMessages(prev => {
                             // Avoid duplicates
                             if (prev.find(m => m.id === newMsg.id)) {
@@ -135,13 +138,15 @@ export default function PrivateChat({
                             return [...prev, newMsg];
                         });
                         markMessagesAsRead();
+                    } else if (newMsg.lobby_id !== lobbyId) {
+                        console.log('🚫 Message from different lobby, ignoring');
                     }
                 }
             )
             .subscribe((status, err) => {
                 console.log('📡 From subscription status:', status);
                 if (status === 'SUBSCRIBED') {
-                    console.log('✅ Successfully subscribed to incoming messages from', targetProfileId);
+                    console.log('✅ Successfully subscribed to incoming messages from', targetProfileId, 'in lobby', lobbyId);
                 } else if (status === 'CHANNEL_ERROR') {
                     console.error('❌ Channel error for incoming messages:', err);
                 } else if (status === 'TIMED_OUT') {
@@ -149,9 +154,9 @@ export default function PrivateChat({
                 }
             });
 
-        // Subscribe to messages FROM me TO target user
+        // Subscribe to messages FROM me TO target user IN THIS LOBBY
         const channelTo = supabase
-            .channel(`private_chat_to:${myProfileId}:${targetProfileId}`, {
+            .channel(`private_chat_to:${myProfileId}:${targetProfileId}:${lobbyId}`, {
                 config: {
                     broadcast: { self: false },
                     presence: { key: '' }
@@ -167,9 +172,9 @@ export default function PrivateChat({
                 },
                 (payload) => {
                     const newMsg = payload.new as PrivateMessage;
-                    // Only add if it's to target
-                    if (newMsg.to_profile_id === targetProfileId) {
-                        console.log('📤 Sent message to', targetProfileId, ':', newMsg);
+                    // Only add if it's to target AND in this lobby
+                    if (newMsg.to_profile_id === targetProfileId && newMsg.lobby_id === lobbyId) {
+                        console.log('📤 Sent message to', targetProfileId, 'in lobby', lobbyId, ':', newMsg);
                         setMessages(prev => {
                             // Avoid duplicates
                             if (prev.find(m => m.id === newMsg.id)) {
@@ -178,13 +183,15 @@ export default function PrivateChat({
                             }
                             return [...prev, newMsg];
                         });
+                    } else if (newMsg.lobby_id !== lobbyId) {
+                        console.log('🚫 Message from different lobby, ignoring');
                     }
                 }
             )
             .subscribe((status, err) => {
                 console.log('📡 To subscription status:', status);
                 if (status === 'SUBSCRIBED') {
-                    console.log('✅ Successfully subscribed to outgoing messages to', targetProfileId);
+                    console.log('✅ Successfully subscribed to outgoing messages to', targetProfileId, 'in lobby', lobbyId);
                 } else if (status === 'CHANNEL_ERROR') {
                     console.error('❌ Channel error for outgoing messages:', err);
                 } else if (status === 'TIMED_OUT') {
