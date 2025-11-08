@@ -2070,28 +2070,64 @@ const Scene = ({ currentLobby }) => {
 
             {/* Interaction Prompt */}
             {isNearNPC && !isChatting && !privateChatTarget && (
-                <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black/90 text-white px-6 py-4 rounded-lg z-10 border-2 border-white/20">
+                <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 animate-in fade-in zoom-in duration-300">
                     {nearestAvatarRef.current?.type === 'digital-twin' ? (
-                        <div className="text-center space-y-2">
-                            <p className="font-semibold text-lg">
-                                Near {nearestAvatarRef.current.data.profile.username}
-                            </p>
-                            <div className="flex gap-3">
-                                <div className="bg-blue-500/20 px-3 py-1 rounded">
-                                    <span className="text-blue-300">F</span> - AI Chat
+                        <div className="bg-gradient-to-br from-slate-900/95 via-slate-800/95 to-slate-900/95 backdrop-blur-xl text-white px-8 py-6 rounded-2xl shadow-2xl border border-slate-700/50">
+                            <div className="text-center space-y-4">
+                                <div className="flex items-center justify-center gap-3 mb-2">
+                                    <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-full flex items-center justify-center text-xl shadow-lg">
+                                        {nearestAvatarRef.current.data.profile.username.charAt(0).toUpperCase()}
+                                    </div>
+                                    <div className="text-left">
+                                        <p className="font-bold text-lg text-white">
+                                            {nearestAvatarRef.current.data.profile.username}
+                                        </p>
+                                        <p className="text-xs text-slate-400 flex items-center gap-1">
+                                            <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                                            Nearby Player
+                                        </p>
+                                    </div>
                                 </div>
-                                <div className="bg-green-500/20 px-3 py-1 rounded relative">
-                                    <span className="text-green-300">G</span> - Private Message
-                                    {unreadMessages.get(nearestAvatarRef.current.data.profile.id) > 0 && (
-                                        <Badge className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1.5 py-0.5">
-                                            {unreadMessages.get(nearestAvatarRef.current.data.profile.id)}
-                                        </Badge>
-                                    )}
+                                
+                                <div className="flex gap-3 justify-center">
+                                    <button className="group relative bg-gradient-to-br from-blue-600/90 to-blue-700/90 hover:from-blue-500 hover:to-blue-600 px-5 py-3 rounded-xl transition-all duration-300 hover:scale-105 active:scale-95 shadow-lg border border-blue-500/30">
+                                        <div className="flex items-center gap-2">
+                                            <kbd className="bg-white/20 text-blue-200 px-2 py-1 rounded-lg text-sm font-bold shadow-inner">F</kbd>
+                                            <span className="text-sm font-medium text-white">AI Chat</span>
+                                        </div>
+                                        <div className="absolute -top-1 -right-1 w-3 h-3 bg-blue-400 rounded-full opacity-0 group-hover:opacity-100 animate-ping"></div>
+                                    </button>
+                                    
+                                    <button className="group relative bg-gradient-to-br from-green-600/90 to-emerald-700/90 hover:from-green-500 hover:to-emerald-600 px-5 py-3 rounded-xl transition-all duration-300 hover:scale-105 active:scale-95 shadow-lg border border-green-500/30">
+                                        <div className="flex items-center gap-2">
+                                            <kbd className="bg-white/20 text-green-200 px-2 py-1 rounded-lg text-sm font-bold shadow-inner">G</kbd>
+                                            <span className="text-sm font-medium text-white">Message</span>
+                                        </div>
+                                        {unreadMessages.get(nearestAvatarRef.current.data.profile.id) > 0 && (
+                                            <div className="absolute -top-2 -right-2 bg-gradient-to-br from-red-500 to-pink-600 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg animate-bounce border-2 border-white">
+                                                {unreadMessages.get(nearestAvatarRef.current.data.profile.id)}
+                                            </div>
+                                        )}
+                                        <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full opacity-0 group-hover:opacity-100 animate-ping"></div>
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     ) : (
-                        <div>Press <span className="font-bold bg-white/20 px-2 py-1 rounded">F</span> to talk with host</div>
+                        <div className="bg-gradient-to-br from-slate-900/95 via-slate-800/95 to-slate-900/95 backdrop-blur-xl text-white px-8 py-6 rounded-2xl shadow-2xl border border-slate-700/50">
+                            <div className="flex items-center gap-3">
+                                <div className="w-12 h-12 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-full flex items-center justify-center text-2xl shadow-lg animate-bounce">
+                                    🤖
+                                </div>
+                                <div>
+                                    <p className="text-sm text-slate-400">Press to interact</p>
+                                    <div className="flex items-center gap-2 mt-1">
+                                        <kbd className="bg-white/20 text-white px-3 py-1.5 rounded-lg font-bold shadow-inner">F</kbd>
+                                        <span className="text-white font-medium">Talk with Host</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     )}
                 </div>
             )}
@@ -2360,16 +2396,21 @@ const Scene = ({ currentLobby }) => {
 
             {/* Room Info Modal */}
             {showRoomInfo && currentLobby && (
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-                    <Card className="bg-gray-900/95 backdrop-blur-sm border-gray-700 w-full max-w-md">
-                        <CardHeader>
+                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in duration-300">
+                    <Card className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 backdrop-blur-xl border-2 border-slate-700/50 w-full max-w-lg shadow-2xl rounded-2xl overflow-hidden animate-in zoom-in duration-300">
+                        <CardHeader className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 p-6">
                             <div className="flex justify-between items-center">
-                                <CardTitle className="text-xl text-white">
-                                    🏠 Room Information
-                                </CardTitle>
+                                <div className="flex items-center gap-3">
+                                    <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center text-2xl border border-white/30 shadow-lg">
+                                        🏠
+                                    </div>
+                                    <CardTitle className="text-2xl text-white font-bold">
+                                        Room Information
+                                    </CardTitle>
+                                </div>
                                 <button
                                     onClick={() => setShowRoomInfo(false)}
-                                    className="text-gray-400 hover:text-white"
+                                    className="text-white/80 hover:text-white hover:bg-white/20 rounded-full w-10 h-10 flex items-center justify-center transition-all hover:rotate-90 duration-300"
                                 >
                                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -2378,26 +2419,32 @@ const Scene = ({ currentLobby }) => {
                             </div>
                         </CardHeader>
 
-                        <CardContent className="space-y-4">
+                        <CardContent className="p-6 space-y-5">
                             {/* Room Name */}
-                            <div>
-                                <h3 className="text-sm font-medium text-gray-300 mb-1">Room Name</h3>
-                                <p className="text-white">{currentLobby.name || 'Unknown Room'}</p>
+                            <div className="bg-slate-800/50 rounded-xl p-4 border border-slate-700/50">
+                                <h3 className="text-xs font-semibold text-slate-400 mb-2 uppercase tracking-wider">Room Name</h3>
+                                <p className="text-white text-lg font-semibold flex items-center gap-2">
+                                    <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                                    {currentLobby.name || 'Unknown Room'}
+                                </p>
                             </div>
 
                             {/* Room Code */}
-                            <div>
-                                <h3 className="text-sm font-medium text-gray-300 mb-1">Room Code</h3>
-                                <div className="flex items-center gap-2">
-                                    <p className="text-white font-mono text-lg bg-gray-800 px-3 py-1 rounded">
+                            <div className="bg-slate-800/50 rounded-xl p-4 border border-slate-700/50">
+                                <h3 className="text-xs font-semibold text-slate-400 mb-2 uppercase tracking-wider">Room Code</h3>
+                                <div className="flex items-center gap-3">
+                                    <p className="text-white font-mono text-xl bg-gradient-to-r from-indigo-600 to-purple-600 px-4 py-2 rounded-lg flex-1 text-center shadow-lg border border-indigo-500/50">
                                         {currentLobby.lobbyId || 'N/A'}
                                     </p>
                                     <button
                                         onClick={() => {
                                             navigator.clipboard.writeText(currentLobby.lobbyId || '');
-                                            alert('Room code copied to clipboard!');
+                                            const btn = event?.target as HTMLButtonElement;
+                                            const originalText = btn.textContent;
+                                            btn.textContent = '✓';
+                                            setTimeout(() => btn.textContent = originalText || '📋', 1000);
                                         }}
-                                        className="p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded"
+                                        className="p-3 text-slate-400 hover:text-white hover:bg-slate-700 rounded-lg transition-all hover:scale-110 active:scale-95 border border-slate-600/50"
                                         title="Copy room code"
                                     >
                                         📋
@@ -2406,19 +2453,22 @@ const Scene = ({ currentLobby }) => {
                             </div>
 
                             {/* Room URL */}
-                            <div>
-                                <h3 className="text-sm font-medium text-gray-300 mb-1">Share URL</h3>
-                                <div className="flex items-center gap-2">
-                                    <p className="text-blue-300 text-sm bg-gray-800 px-3 py-2 rounded break-all">
+                            <div className="bg-slate-800/50 rounded-xl p-4 border border-slate-700/50">
+                                <h3 className="text-xs font-semibold text-slate-400 mb-2 uppercase tracking-wider">Share URL</h3>
+                                <div className="flex items-center gap-3">
+                                    <p className="text-indigo-300 text-sm bg-slate-900/80 px-4 py-2 rounded-lg break-all flex-1 font-mono border border-slate-700/50">
                                         {window.location.origin}/{currentLobby.lobbyId}
                                     </p>
                                     <button
                                         onClick={() => {
                                             const url = `${window.location.origin}/${currentLobby.lobbyId}`;
                                             navigator.clipboard.writeText(url);
-                                            alert('Room URL copied to clipboard!');
+                                            const btn = event?.target as HTMLButtonElement;
+                                            const originalText = btn.textContent;
+                                            btn.textContent = '✓';
+                                            setTimeout(() => btn.textContent = originalText || '📋', 1000);
                                         }}
-                                        className="p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded"
+                                        className="p-3 text-slate-400 hover:text-white hover:bg-slate-700 rounded-lg transition-all hover:scale-110 active:scale-95 border border-slate-600/50"
                                         title="Copy room URL"
                                     >
                                         📋
@@ -2428,26 +2478,49 @@ const Scene = ({ currentLobby }) => {
 
                             {/* Room Description */}
                             {currentLobby.description && (
-                                <div>
-                                    <h3 className="text-sm font-medium text-gray-300 mb-1">Description</h3>
-                                    <p className="text-gray-200 text-sm">{currentLobby.description}</p>
+                                <div className="bg-slate-800/50 rounded-xl p-4 border border-slate-700/50">
+                                    <h3 className="text-xs font-semibold text-slate-400 mb-2 uppercase tracking-wider">Description</h3>
+                                    <p className="text-slate-200 text-sm leading-relaxed">{currentLobby.description}</p>
                                 </div>
                             )}
 
                             {/* Host Info */}
                             {currentLobby.hostAvatar?.name && (
-                                <div>
-                                    <h3 className="text-sm font-medium text-gray-300 mb-1">Host</h3>
-                                    <p className="text-white">{currentLobby.hostAvatar.name}</p>
+                                <div className="bg-slate-800/50 rounded-xl p-4 border border-slate-700/50">
+                                    <h3 className="text-xs font-semibold text-slate-400 mb-2 uppercase tracking-wider">Host</h3>
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-10 h-10 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-full flex items-center justify-center text-xl shadow-lg">
+                                            🤖
+                                        </div>
+                                        <p className="text-white font-semibold">{currentLobby.hostAvatar.name}</p>
+                                    </div>
                                 </div>
                             )}
 
                             {/* Current Players */}
-                            <div>
-                                <h3 className="text-sm font-medium text-gray-300 mb-1">Players</h3>
-                                <p className="text-white">
-                                    {currentLobby.currentPlayers?.length || 0} / {currentLobby.maxPlayers || 'Unlimited'}
-                                </p>
+                            <div className="bg-slate-800/50 rounded-xl p-4 border border-slate-700/50">
+                                <h3 className="text-xs font-semibold text-slate-400 mb-2 uppercase tracking-wider">Active Players</h3>
+                                <div className="flex items-center gap-3">
+                                    <div className="flex-1 bg-slate-900/80 rounded-lg p-3 border border-slate-700/50">
+                                        <div className="flex items-center justify-between">
+                                            <div className="flex items-center gap-2">
+                                                <div className="flex -space-x-2">
+                                                    {[...Array(Math.min(currentLobby.currentPlayers?.length || 0, 3))].map((_, i) => (
+                                                        <div key={i} className="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-full border-2 border-slate-900 flex items-center justify-center text-white text-xs font-bold">
+                                                            {i + 1}
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                                <span className="text-white font-bold text-lg">
+                                                    {currentLobby.currentPlayers?.length || 0}
+                                                </span>
+                                            </div>
+                                            <div className="text-slate-400 text-sm">
+                                                / {currentLobby.maxPlayers || '∞'}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </CardContent>
                     </Card>
@@ -2489,27 +2562,52 @@ const Scene = ({ currentLobby }) => {
             {/* Private Message Notification Popup */}
             {messageNotification && (
                 <div 
-                    className="fixed top-20 right-4 bg-gradient-to-r from-green-500 to-green-600 text-white p-4 rounded-lg shadow-xl z-50 border border-green-400 animate-in slide-in-from-right duration-300"
-                    style={{ maxWidth: '320px' }}
+                    className="fixed top-24 right-6 bg-gradient-to-br from-emerald-500 via-green-600 to-teal-600 text-white p-5 rounded-2xl shadow-2xl z-50 border-2 border-emerald-400/50 animate-in slide-in-from-right-5 duration-500 backdrop-blur-sm"
+                    style={{ maxWidth: '380px' }}
                 >
-                    <div className="flex items-start gap-3">
-                        <div className="flex-shrink-0 w-10 h-10 bg-white/20 rounded-full flex items-center justify-center text-lg">
+                    <div className="flex items-start gap-4">
+                        <div className="flex-shrink-0 w-14 h-14 bg-white/25 rounded-2xl flex items-center justify-center text-2xl shadow-lg backdrop-blur-sm border border-white/30 animate-bounce">
                             💬
                         </div>
                         <div className="flex-1 min-w-0">
-                            <p className="font-semibold text-sm mb-1">
-                                New message from {messageNotification.from}
+                            <div className="flex items-center gap-2 mb-1">
+                                <span className="w-2 h-2 bg-emerald-300 rounded-full animate-pulse"></span>
+                                <p className="font-bold text-sm text-emerald-100">
+                                    New Message
+                                </p>
+                            </div>
+                            <p className="font-semibold text-base mb-2">
+                                {messageNotification.from}
                             </p>
-                            <p className="text-white/90 text-xs line-clamp-2">
+                            <p className="text-white/95 text-sm line-clamp-2 leading-relaxed bg-white/10 px-3 py-2 rounded-lg backdrop-blur-sm">
                                 {messageNotification.message}
                             </p>
                         </div>
                         <button
                             onClick={() => setMessageNotification(null)}
-                            className="flex-shrink-0 text-white/80 hover:text-white text-lg leading-none"
+                            className="flex-shrink-0 text-white/70 hover:text-white hover:bg-white/20 rounded-lg w-8 h-8 flex items-center justify-center text-xl leading-none transition-all hover:rotate-90 duration-300"
                         >
                             ×
                         </button>
+                    </div>
+                    <div className="mt-3 pt-3 border-t border-white/20">
+                        <div className="flex gap-2">
+                            <button 
+                                onClick={() => {
+                                    // TODO: Open chat with sender
+                                    setMessageNotification(null);
+                                }}
+                                className="flex-1 bg-white/20 hover:bg-white/30 backdrop-blur-sm px-3 py-2 rounded-lg text-xs font-medium transition-all hover:scale-105 active:scale-95"
+                            >
+                                Reply
+                            </button>
+                            <button 
+                                onClick={() => setMessageNotification(null)}
+                                className="px-3 py-2 rounded-lg text-xs font-medium text-white/70 hover:text-white hover:bg-white/10 transition-all"
+                            >
+                                Dismiss
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}
