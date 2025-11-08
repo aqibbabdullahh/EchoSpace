@@ -184,6 +184,20 @@ const ProfileCreator = ({ onComplete, editingProfile, isEditing = false }: Profi
 
     return (
         <div className="w-full max-w-3xl mx-auto px-4 py-8">
+            {/* Back button for editing mode */}
+            {isEditing && (
+                <button
+                    onClick={onComplete}
+                    className="mb-6 flex items-center gap-2 text-gray-400 hover:text-white transition-all duration-200 group"
+                    style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif" }}
+                >
+                    <svg className="w-5 h-5 transform group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                    </svg>
+                    <span className="font-medium">Back to Dashboard</span>
+                </button>
+            )}
+            
             {/* Apple-style minimal header */}
             <div className="text-center mb-12 animate-in fade-in duration-700">
                 <h1 className="text-5xl font-semibold tracking-tight mb-4" style={{ 
