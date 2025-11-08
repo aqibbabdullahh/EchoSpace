@@ -145,151 +145,174 @@ const ProfileCreator = ({ onComplete, editingProfile, isEditing = false }: Profi
     // If profile exists and we're not editing, show welcome back
     if (profile && !isEditing) {
         return (
-            <Card className="w-full max-w-md mx-auto card-3d glass-3d neon-border relative overflow-hidden" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                {/* Holographic overlay */}
-                <div className="holographic absolute inset-0 pointer-events-none opacity-30 rounded-lg" />
-                
-                <CardContent className="p-8 text-center relative z-10 bounce-in">
-                    <div className="float-3d mb-6">
-                        <h2 className="text-4xl font-black tracking-tight mb-2" style={{ 
-                            fontFamily: "'Orbitron', sans-serif",
-                            background: 'linear-gradient(135deg, #00f5ff 0%, #a78bfa 50%, #ec4899 100%)',
-                            WebkitBackgroundClip: 'text',
-                            WebkitTextFillColor: 'transparent'
-                        }}>
-                            Welcome back, {profile.username}! 👋
-                        </h2>
-                    </div>
-                    <p className="text-xl font-semibold mb-6" style={{ 
-                        fontFamily: "'Exo 2', sans-serif",
-                        background: 'linear-gradient(90deg, #60efff 0%, #c084fc 100%)',
-                        WebkitBackgroundClip: 'text',
-                        WebkitTextFillColor: 'transparent'
-                    }}>
-                        ✨ Your digital twin is ready to explore the metaverse.
-                    </p>
-                    <Button 
-                        onClick={onComplete} 
-                        className="w-full btn-3d gradient-animated neon-border h-14 text-lg font-black tracking-wide"
-                        style={{ fontFamily: "'Orbitron', sans-serif" }}
-                    >
-                        🚀 Enter YNGO
-                    </Button>
-                </CardContent>
-            </Card>
+            <div className="w-full max-w-md mx-auto px-4 py-16">
+                <Card className="border-0 bg-white/5 backdrop-blur-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-700" style={{
+                    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+                    borderRadius: '24px'
+                }}>
+                    <CardContent className="p-10 text-center">
+                        <div className="mb-8">
+                            <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-4xl shadow-2xl shadow-purple-500/30">
+                                👋
+                            </div>
+                            <h2 className="text-3xl font-semibold text-white mb-3" style={{ 
+                                fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif",
+                                letterSpacing: '-0.03em'
+                            }}>
+                                Welcome back, {profile.username}
+                            </h2>
+                            <p className="text-lg text-gray-400" style={{ 
+                                fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif"
+                            }}>
+                                Your digital twin is ready to explore the metaverse
+                            </p>
+                        </div>
+                        <Button 
+                            onClick={onComplete} 
+                            className="w-full h-14 text-base font-semibold bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white border-0 rounded-xl shadow-lg hover:shadow-purple-500/50 transition-all duration-300"
+                            style={{ 
+                                fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif"
+                            }}
+                        >
+                            Enter YNGO
+                        </Button>
+                    </CardContent>
+                </Card>
+            </div>
         );
     }
 
     return (
-        <Card className="w-full max-w-2xl mx-auto card-3d glass-3d neon-border max-h-[90vh] overflow-hidden flex flex-col relative" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-            {/* Holographic overlay */}
-            <div className="holographic absolute inset-0 pointer-events-none opacity-30 rounded-lg" />
-            
-            <CardHeader className="flex-shrink-0 relative z-10">
-                <CardTitle className="text-4xl text-center font-black tracking-tight" style={{ 
-                    fontFamily: "'Orbitron', sans-serif",
-                    background: 'linear-gradient(135deg, #00f5ff 0%, #a78bfa 25%, #ec4899 50%, #fbbf24 75%, #00f5ff 100%)',
-                    backgroundSize: '200% auto',
+        <div className="w-full max-w-3xl mx-auto px-4 py-8">
+            {/* Apple-style minimal header */}
+            <div className="text-center mb-12 animate-in fade-in duration-700">
+                <h1 className="text-5xl font-semibold tracking-tight mb-4" style={{ 
+                    fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif",
+                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
-                    animation: 'gradient-shift 3s linear infinite'
+                    letterSpacing: '-0.03em'
                 }}>
-                    {isEditing ? '✨ Edit Your Profile' : '🌟 Create Your Digital Twin'}
-                </CardTitle>
-                <p className="text-center text-lg font-semibold mt-2" style={{ 
-                    fontFamily: "'Exo 2', sans-serif",
-                    background: 'linear-gradient(90deg, #60efff 0%, #c084fc 50%, #f472b6 100%)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent'
+                    {isEditing ? 'Edit Your Profile' : 'Create Your Digital Twin'}
+                </h1>
+                <p className="text-xl text-gray-400 font-normal max-w-2xl mx-auto" style={{ 
+                    fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', sans-serif"
                 }}>
                     {isEditing
                         ? 'Update your avatar and personality settings'
-                        : 'Your avatar will persist in the metaverse even when you\'re offline!'
+                        : 'Your avatar will persist in the metaverse even when you\'re offline'
                     }
                 </p>
-                <div className="flex justify-center gap-3 mt-6">
-                    <Badge 
-                        variant={step === 1 ? "default" : "outline"}
-                        className={step === 1 ? "card-3d gradient-animated neon-border px-4 py-2 font-bold" : "glass-3d border-cyan-500/50 px-4 py-2 font-semibold"}
-                        style={{ fontFamily: "'Orbitron', sans-serif" }}
-                    >
-                        <span className="neon-text">1. Identity</span>
-                    </Badge>
-                    <Badge 
-                        variant={step === 2 ? "default" : "outline"}
-                        className={step === 2 ? "card-3d gradient-animated neon-border px-4 py-2 font-bold" : "glass-3d border-purple-500/50 px-4 py-2 font-semibold"}
-                        style={{ fontFamily: "'Orbitron', sans-serif" }}
-                    >
-                        <span className="neon-text">2. Avatar</span>
-                    </Badge>
-                    <Badge 
-                        variant={step === 3 ? "default" : "outline"}
-                        className={step === 3 ? "card-3d gradient-animated neon-border px-4 py-2 font-bold" : "glass-3d border-pink-500/50 px-4 py-2 font-semibold"}
-                        style={{ fontFamily: "'Orbitron', sans-serif" }}
-                    >
-                        <span className="neon-text">3. Personality</span>
-                    </Badge>
+            </div>
+
+            {/* Apple-style progress indicators */}
+            <div className="flex items-center justify-center gap-3 mb-10">
+                <div className={`h-1.5 rounded-full transition-all duration-500 ${step >= 1 ? 'w-24 bg-gradient-to-r from-purple-500 to-indigo-500' : 'w-16 bg-gray-700'}`} />
+                <div className={`h-1.5 rounded-full transition-all duration-500 ${step >= 2 ? 'w-24 bg-gradient-to-r from-purple-500 to-indigo-500' : 'w-16 bg-gray-700'}`} />
+                <div className={`h-1.5 rounded-full transition-all duration-500 ${step >= 3 ? 'w-24 bg-gradient-to-r from-purple-500 to-indigo-500' : 'w-16 bg-gray-700'}`} />
+            </div>
+
+            {/* Main content card */}
+            <Card className="border-0 bg-white/5 backdrop-blur-2xl shadow-2xl overflow-hidden" style={{
+                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+                borderRadius: '24px'
+            }}>
+            <CardHeader className="pb-8 pt-10 px-10">
+                <div className="flex items-center gap-3 mb-2">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-white text-lg font-semibold shadow-lg">
+                        {step}
+                    </div>
+                    <CardTitle className="text-2xl font-semibold text-white" style={{ 
+                        fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif",
+                        letterSpacing: '-0.02em'
+                    }}>
+                        {step === 1 ? 'Identity' : step === 2 ? 'Choose Avatar' : 'Personality'}
+                    </CardTitle>
                 </div>
             </CardHeader>
-            <CardContent className="p-6 flex-1 overflow-y-auto relative z-10">
+            <CardContent className="px-10 pb-10 pt-2">
                 {/* Step 1: Username */}
                 {step === 1 && (
-                    <div className="space-y-6 bounce-in">
-                        <div className="card-3d glass-3d p-6 neon-border">
-                            <label className="text-lg font-semibold bg-gradient-to-r from-cyan-300 to-blue-300 bg-clip-text text-transparent mb-3 block">
-                                ✨ Choose Your Username
+                    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                        <div className="space-y-3">
+                            <label className="text-sm font-medium text-gray-300 block" style={{ 
+                                fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif"
+                            }}>
+                                Choose Your Username
                             </label>
                             <Input
                                 type="text"
                                 placeholder="Enter username..."
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
-                                className="glass-3d neon-border text-white text-lg font-medium placeholder:text-cyan-300/50 h-14"
+                                className="h-14 px-4 text-lg bg-white/10 border border-white/20 rounded-xl text-white placeholder:text-gray-500 focus:bg-white/15 focus:border-purple-500/50 focus:ring-2 focus:ring-purple-500/20 transition-all duration-200"
+                                style={{ 
+                                    fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif",
+                                    backdropFilter: 'blur(20px)'
+                                }}
                                 maxLength={20}
                             />
-                            <p className="text-sm text-cyan-200/70 mt-3 font-medium">
-                                💫 This is how others will know you in the metaverse
+                            <p className="text-sm text-gray-400 flex items-center gap-2" style={{ 
+                                fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif"
+                            }}>
+                                <span className="text-purple-400">•</span>
+                                This is how others will know you in the metaverse
                             </p>
                         </div>
 
-                        {/* Greeting field removed */}
-
                         <Button
                             onClick={() => username.trim() && setStep(2)}
-                            className="w-full btn-3d gradient-animated neon-border h-14 text-lg font-bold"
+                            className="w-full h-14 text-base font-semibold bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white border-0 rounded-xl shadow-lg hover:shadow-purple-500/50 transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed"
+                            style={{ 
+                                fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif"
+                            }}
                             disabled={!username.trim()}
                         >
-                            Next: Choose Avatar →
+                            Continue
                         </Button>
                     </div>
                 )}
 
                 {/* Step 2: Avatar Selection */}
                 {step === 2 && (
-                    <div className="space-y-6 bounce-in">
-                        <div className="card-3d glass-3d p-6 neon-border">
-                            <label className="text-lg font-semibold bg-gradient-to-r from-purple-300 to-pink-300 bg-clip-text text-transparent mb-4 block">
-                                👤 Select Your Avatar
+                    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                        <div className="space-y-4">
+                            <label className="text-sm font-medium text-gray-300 block" style={{ 
+                                fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif"
+                            }}>
+                                Select Your Avatar
                             </label>
-                            <div className="grid grid-cols-4 gap-4">
+                            <div className="grid grid-cols-4 gap-3">
                                 {avatarOptions.map(avatar => (
                                     <button
                                         key={avatar.id}
                                         onClick={() => setSelectedAvatar(avatar.model)}
-                                        className={`p-4 rounded-lg border-2 transition-all duration-300 card-hover-3d ${
+                                        className={`group relative p-3 rounded-2xl transition-all duration-300 ${
                                             selectedAvatar === avatar.model
-                                                ? 'neon-border gradient-animated scale-110'
-                                                : 'border-cyan-500/30 glass-3d hover:border-cyan-400/60'
+                                                ? 'bg-gradient-to-br from-purple-600/30 to-indigo-600/30 ring-2 ring-purple-500 shadow-lg shadow-purple-500/30'
+                                                : 'bg-white/5 hover:bg-white/10 border border-white/10'
                                         }`}
+                                        style={{ backdropFilter: 'blur(20px)' }}
                                     >
-                                        <div className={selectedAvatar === avatar.model ? 'float-3d' : ''}>
+                                        <div className="aspect-square mb-2 rounded-xl overflow-hidden">
                                             <img 
                                                 src={avatar.preview} 
                                                 alt={avatar.name}
-                                                className="w-16 h-16 object-cover rounded-lg mb-2 mx-auto"
+                                                className={`w-full h-full object-cover transition-transform duration-300 ${
+                                                    selectedAvatar === avatar.model ? 'scale-105' : 'group-hover:scale-110'
+                                                }`}
                                             />
-                                            <div className="text-xs font-bold neon-text">{avatar.name}</div>
                                         </div>
+                                        <div className="text-xs font-medium text-gray-300 text-center" style={{ 
+                                            fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif"
+                                        }}>
+                                            {avatar.name}
+                                        </div>
+                                        {selectedAvatar === avatar.model && (
+                                            <div className="absolute -top-1 -right-1 w-6 h-6 bg-purple-500 rounded-full flex items-center justify-center shadow-lg">
+                                                <span className="text-white text-xs">✓</span>
+                                            </div>
+                                        )}
                                     </button>
                                 ))}
                             </div>
@@ -299,15 +322,21 @@ const ProfileCreator = ({ onComplete, editingProfile, isEditing = false }: Profi
                             <Button
                                 onClick={() => setStep(1)}
                                 variant="outline"
-                                className="flex-1 glass-3d border-cyan-500/50 hover:border-cyan-400 h-12 text-base font-semibold"
+                                className="flex-1 h-14 bg-white/5 hover:bg-white/10 border border-white/20 text-white rounded-xl transition-all duration-200"
+                                style={{ 
+                                    fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif"
+                                }}
                             >
-                                ← Back
+                                Back
                             </Button>
                             <Button
                                 onClick={() => setStep(3)}
-                                className="flex-1 btn-3d gradient-animated neon-border h-12 text-base font-bold"
+                                className="flex-1 h-14 text-base font-semibold bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white border-0 rounded-xl shadow-lg hover:shadow-purple-500/50 transition-all duration-300"
+                                style={{ 
+                                    fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif"
+                                }}
                             >
-                                Next: Personality →
+                                Continue
                             </Button>
                         </div>
                     </div>
@@ -315,12 +344,14 @@ const ProfileCreator = ({ onComplete, editingProfile, isEditing = false }: Profi
 
                 {/* Step 3: Personality */}
                 {step === 3 && (
-                    <div className="space-y-6 bounce-in">
-                        <div className="card-3d glass-3d p-6 neon-border">
-                            <label className="text-lg font-semibold bg-gradient-to-r from-pink-300 to-orange-300 bg-clip-text text-transparent mb-3 block">
-                                🎭 Personality
+                    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                        <div className="space-y-4">
+                            <label className="text-sm font-medium text-gray-300 block" style={{ 
+                                fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif"
+                            }}>
+                                Personality Type
                             </label>
-                            <div className="space-y-2 mb-3">
+                            <div className="space-y-2">
                                 {personalityTemplates.map((template) => (
                                     <button
                                         key={template.label}
@@ -332,34 +363,50 @@ const ProfileCreator = ({ onComplete, editingProfile, isEditing = false }: Profi
                                                 setPersonality(template.value);
                                             }
                                         }}
-                                        className={`w-full text-left p-3 rounded-lg border-2 transition-all duration-300 card-hover-3d ${
+                                        className={`w-full text-left p-4 rounded-xl transition-all duration-200 ${
                                             (template.label === 'Custom' && isCustomPersonality) ||
                                             (!isCustomPersonality && personality === template.value)
-                                                ? 'neon-border gradient-animated'
-                                                : 'border-purple-500/30 glass-3d hover:border-purple-400/60'
+                                                ? 'bg-gradient-to-r from-purple-600/30 to-indigo-600/30 ring-2 ring-purple-500'
+                                                : 'bg-white/5 hover:bg-white/10 border border-white/10'
                                         }`}
+                                        style={{ backdropFilter: 'blur(20px)' }}
                                     >
-                                        <div className="text-white text-sm font-bold neon-text">{template.label}</div>
+                                        <div className="text-white text-sm font-semibold mb-1" style={{ 
+                                            fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif"
+                                        }}>
+                                            {template.label}
+                                        </div>
                                         {template.value && (
-                                            <div className="text-xs text-cyan-200/70 mt-1">{template.value}</div>
+                                            <div className="text-xs text-gray-400" style={{ 
+                                                fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif"
+                                            }}>
+                                                {template.value}
+                                            </div>
                                         )}
                                     </button>
                                 ))}
                             </div>
-                            <Textarea
-                                placeholder="Describe your personality..."
-                                value={personality}
-                                onChange={(e) => setPersonality(e.target.value)}
-                                className="glass-3d neon-border text-white font-medium placeholder:text-purple-300/50"
-                                rows={3}
-                                maxLength={10000}
-                            />
-                            <p className="text-xs text-cyan-200/70 mt-2 font-medium">{personality.length}/10,000 characters</p>
+                            {isCustomPersonality && (
+                                <Textarea
+                                    placeholder="Describe your personality..."
+                                    value={personality}
+                                    onChange={(e) => setPersonality(e.target.value)}
+                                    className="mt-3 p-4 bg-white/10 border border-white/20 rounded-xl text-white placeholder:text-gray-500 focus:bg-white/15 focus:border-purple-500/50 focus:ring-2 focus:ring-purple-500/20 transition-all duration-200"
+                                    style={{ 
+                                        fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif",
+                                        backdropFilter: 'blur(20px)'
+                                    }}
+                                    rows={3}
+                                    maxLength={10000}
+                                />
+                            )}
                         </div>
 
-                        <div className="card-3d glass-3d p-6 neon-border">
-                            <label className="text-lg font-semibold bg-gradient-to-r from-green-300 to-cyan-300 bg-clip-text text-transparent mb-3 block">
-                                ❤️ Interests (select up to 5)
+                        <div className="space-y-4">
+                            <label className="text-sm font-medium text-gray-300 block" style={{ 
+                                fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif"
+                            }}>
+                                Interests <span className="text-gray-500">({interests.length}/5)</span>
                             </label>
                             <div className="grid grid-cols-3 gap-2">
                                 {interestOptions.map((interest) => (
@@ -372,11 +419,15 @@ const ProfileCreator = ({ onComplete, editingProfile, isEditing = false }: Profi
                                                 setInterests([...interests, interest]);
                                             }
                                         }}
-                                        className={`p-2 text-xs rounded-lg border-2 transition-all duration-300 font-semibold ${
+                                        className={`p-3 text-sm rounded-xl transition-all duration-200 font-medium ${
                                             interests.includes(interest)
-                                                ? 'neon-border gradient-animated scale-105'
-                                                : 'border-cyan-500/30 glass-3d hover:border-cyan-400/60 text-gray-300'
+                                                ? 'bg-gradient-to-r from-purple-600/30 to-indigo-600/30 ring-2 ring-purple-500 text-white'
+                                                : 'bg-white/5 hover:bg-white/10 border border-white/10 text-gray-400'
                                         }`}
+                                        style={{ 
+                                            fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif",
+                                            backdropFilter: 'blur(20px)'
+                                        }}
                                         disabled={!interests.includes(interest) && interests.length >= 5}
                                     >
                                         {interest}
@@ -385,37 +436,53 @@ const ProfileCreator = ({ onComplete, editingProfile, isEditing = false }: Profi
                             </div>
                         </div>
 
-                        <div className="card-3d glass-3d p-6 neon-border">
-                            <label className="text-lg font-semibold bg-gradient-to-r from-blue-300 to-purple-300 bg-clip-text text-transparent mb-3 block">
-                                📝 Background
+                        <div className="space-y-4">
+                            <label className="text-sm font-medium text-gray-300 block" style={{ 
+                                fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif"
+                            }}>
+                                About You
                             </label>
                             <Textarea
-                                placeholder="Tell others about yourself... (feel free to copy and paste your resume)"
+                                placeholder="Tell others about yourself..."
                                 value={bio}
                                 onChange={(e) => setBio(e.target.value)}
-                                className="glass-3d neon-border text-white font-medium placeholder:text-blue-300/50"
-                                rows={6}
+                                className="p-4 bg-white/10 border border-white/20 rounded-xl text-white placeholder:text-gray-500 focus:bg-white/15 focus:border-purple-500/50 focus:ring-2 focus:ring-purple-500/20 transition-all duration-200"
+                                style={{ 
+                                    fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif",
+                                    backdropFilter: 'blur(20px)'
+                                }}
+                                rows={5}
                                 maxLength={100000}
                             />
-                            <p className="text-xs text-cyan-200/70 mt-2 font-medium">{bio.length}/100,000</p>
+                            <p className="text-xs text-gray-500" style={{ 
+                                fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif"
+                            }}>
+                                {bio.length.toLocaleString()} characters
+                            </p>
                         </div>
 
-                        <div className="flex gap-3">
+                        <div className="flex gap-3 pt-4">
                             <Button
                                 onClick={() => setStep(2)}
                                 variant="outline"
-                                className="flex-1 glass-3d border-purple-500/50 hover:border-purple-400 h-12 text-base font-semibold"
+                                className="flex-1 h-14 bg-white/5 hover:bg-white/10 border border-white/20 text-white rounded-xl transition-all duration-200"
+                                style={{ 
+                                    fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif"
+                                }}
                             >
-                                ← Back
+                                Back
                             </Button>
                             <Button
                                 onClick={handleCreateProfile}
                                 disabled={isCreating}
-                                className="flex-1 btn-3d gradient-animated neon-border h-12 text-base font-bold"
+                                className="flex-1 h-14 text-base font-semibold bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white border-0 rounded-xl shadow-lg hover:shadow-purple-500/50 transition-all duration-300 disabled:opacity-50"
+                                style={{ 
+                                    fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif"
+                                }}
                             >
                                 {isCreating
-                                    ? (isEditing ? '⏳ Updating...' : '⏳ Creating...')
-                                    : (isEditing ? '✅ Update Profile' : '🚀 Create Digital Twin')
+                                    ? (isEditing ? 'Updating...' : 'Creating...')
+                                    : (isEditing ? 'Update Profile' : 'Create Profile')
                                 }
                             </Button>
                         </div>
@@ -423,6 +490,7 @@ const ProfileCreator = ({ onComplete, editingProfile, isEditing = false }: Profi
                 )}
             </CardContent>
         </Card>
+        </div>
     );
 };
 
