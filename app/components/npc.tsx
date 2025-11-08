@@ -116,6 +116,11 @@ const Scene = ({ currentLobby }) => {
         profileId: string;
         username: string;
     } | null>(null);
+    const [unreadMessages, setUnreadMessages] = useState<Map<string, number>>(new Map());
+    const [messageNotification, setMessageNotification] = useState<{
+        from: string;
+        message: string;
+    } | null>(null);
 
     // ============================================
     // MOVE THESE FUNCTIONS OUTSIDE init()
@@ -465,9 +470,80 @@ const Scene = ({ currentLobby }) => {
     // Add this state near other state declarations
     const [hasChattedBefore, setHasChattedBefore] = useState(false);
 
+    // Listen for incoming private messages and show notifications
+    useEffect(() => {
+        if (!profile) return;
+
+        const channel = supabase
+            .channel(`user_notifications:${profile.id}`)
+            .on(
+                'postgres_changes',
+                {
+                    event: 'INSERT',
+                    schema: 'public',
+                    table: 'private_messages',
+                    filter: `to_profile_id=eq.${profile.id}`
+                },
+                async (payload) => {
+                    const message = payload.new as any;
+                    console.log('📬 New private message received:', message);
+
+                    // Don't show notification if chat is already open with this user
+                    if (privateChatTarget?.profileId === message.from_profile_id) {
+                        return;
+                    }
+
+                    // Get sender's profile info
+                    const { data: senderProfile } = await supabase
+                        .from('profiles')
+                        .select('username')
+                        .eq('id', message.from_profile_id)
+                        .single();
+
+                    const senderName = senderProfile?.username || 'Someone';
+
+                    // Update unread count
+                    setUnreadMessages(prev => {
+                        const newMap = new Map(prev);
+                        newMap.set(message.from_profile_id, (newMap.get(message.from_profile_id) || 0) + 1);
+                        return newMap;
+                    });
+
+                    // Show popup notification
+                    setMessageNotification({
+                        from: senderName,
+                        message: message.message
+                    });
+
+                    // Play notification sound (optional)
+                    if (typeof Audio !== 'undefined') {
+                        try {
+                            const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTUIGGm98OScTgwLT6fk77RgGwU7k9ryxnMpBSh+zPLaizsKElyx6+ytWBUIQ5/h8sFuIAUrgs/y14g0CBlptfDcmEsMDEyn4u+2Yh0FOJPa88Z0KgUncsvz2Ig7ChNbsOvpqFgTCECd4fK+bCAEK4LO89iJNQgZaLXw3ZhLCw1Pq+Tvt2IdBTmP2vLGeCoFKHLM8tiJOwkSW7Hq6KlYEghAnej0vWogBSyC0PLXiTQLGWiy8N2XSgsNT6rj8LNjHQU6ktvyx3IoByVntvjjp1oQCECf5PPAbyEELoTQ8teKNAoZarTw3ZhKDQxOqOPwtGAdBTmS2/PHciYHKmnA+OahUxMHPqPl88NwIwQoc8ny14k1CRZqsvLem0cOCEqm5PCxXxwEO5Lb8sByKgQrcszz2Ik7ChJbsOrpqVgUB0Gf4vK/biAFKoHO8tiJNQgYabPw3pZLCw1Pq+XvsGAcBjqT2vLGcikFJ3HL89mJOwkSW7Hq6ahYFAc/nuPyvmwfBSuBzvPYiTYIGWmz8N6YSwsNT6vk8LNhHAY6k9vyxnIpBSdxy/PZiToKElux6+mndxMHQaDi8r9vIQUrg8/y14k1BxhqtPDdl0kLDk6r5O+zYBwGO5Hb8sdyKAUocsvz2Yo7ChNbsOvpqFgUB0Gg4vK/byEFK4PP89eJNgcZabPw3plKCw5Oq+PvtGAcBjuS2/LIcigFKHLM89qJPAkSXLHq6alhFAdBn+Lyv28gBSuCzvLXiTYHGGi08N2XSQwNT6zk77RgHQU6k9rwxnEoBylzzPPZijsKElyx6uipVxQHQaDi8r5vIQUthM/y14k2BxlptPHdl0oMDU+s5O+zYB0FOZPb8sdyJwUrccvz2Yo6ChNbsevorVcTB0Ge4vK+bx8FK4PO8teJNggYabTw3phKDAxPrOTvsWAdBTmT2/LHciYGKnDK8tiKOwoSW7Hr6alhFAc+nuHyvW0gBSuCz/PXiTYIG2u08d+ZTQsNT6zk77NfHQU5lNvyxnIoBSZxyvPZijsKElux6+mpWBQHQZ/i8r9vIAUrg87y14k2CBhptPDemEsMDU+s5O+zYRwFOZPb8sZxKAUlccry2Ik5CRJbsuvpqVcUB0Gf4/K/cCEELYPO8teINQgYabTx3pZKCw1Oq+TwsmEcBTqS2/LHcSYFJHHK8dmJOgoRW7Hr6ahXFAdBn+Pyv3AhBS2DzvLXiDUIGGm08d+WSgsMT6vl77JgHAU6ktzyx3EmBiRwyPLXiToJElux6+mpVxQGQZ/i8r9vIAUthM7y1ok0CBdqs/Hdl0oMDU+r5e+yYB0FOZLY8sZxJgUlccrz2Yg6ChJasevpqFgUBz+f4vK+bx8FLIPPy9aJNQgYaLPw3pdJDA1Pq+XvsmAcBjqS2vLGciYFJXHK89mIOgoSWrDr6KlXFAc/n+Pyvmwf');
+                            audio.volume = 0.3;
+                            audio.play().catch(() => {}); // Ignore errors if autoplay blocked
+                        } catch (e) {
+                            console.log('Could not play notification sound');
+                        }
+                    }
+
+                    // Auto-hide notification after 5 seconds
+                    setTimeout(() => {
+                        setMessageNotification(null);
+                    }, 5000);
+                }
+            )
+            .subscribe();
+
+        return () => {
+            supabase.removeChannel(channel);
+        };
+    }, [profile?.id, privateChatTarget]);
 
 
-    // Initialize TTS - REMOVED TO FIX WEBSOCKET ERRORS
+
+    // Cleanup on component unmount only
+    useEffect(() => {
+        return () => {
     // useEffect(() => {
     //     // Debug mode - set to true only when troubleshooting
     //     const DEBUG_MODE = false;
@@ -1746,22 +1822,22 @@ const Scene = ({ currentLobby }) => {
 
             // POSITION SYNCING TO DATABASE - OPTIMIZED FOR PERFORMANCE
             positionUpdateInterval.current += deltaTime;
-            if (positionUpdateInterval.current > 0.25) { // Reduced frequency: 250ms intervals instead of 100ms
+            if (positionUpdateInterval.current > 0.1) { // Faster sync: 100ms intervals for better real-time experience
                 const { profile, currentLobby } = useLobbyStore.getState();
 
                 if (profile && currentLobby && avatarRef.current) {
                     const pos = avatarRef.current.scene.position;
                     const rot = avatarRef.current.scene.rotation;
 
-                    // Check if position actually changed (increased threshold)
+                    // Check if position actually changed (lower threshold for better sync)
                     const lastPos = avatarRef.current.lastSyncedPosition || { x: 0, y: 0, z: 0 };
-                    const moved = Math.abs(pos.x - lastPos.x) > 0.05 ||
-                                Math.abs(pos.z - lastPos.z) > 0.05; // Increased from 0.01 to 0.05
+                    const moved = Math.abs(pos.x - lastPos.x) > 0.02 ||
+                                Math.abs(pos.z - lastPos.z) > 0.02; // Reduced threshold for smoother movement
 
                     const animChanged = currentAnimationRef.current?.getClip().name !== avatarRef.current.lastSyncedAnimation;
 
-                    // Only sync if significantly moved or animation changed
-                    if (moved || animChanged) {
+                    // Sync more frequently for better real-time movement
+                    if (moved || animChanged || positionUpdateInterval.current > 0.5) {
                         useLobbyStore.getState().updateAvatarState({
                             position: { x: pos.x, y: pos.y, z: pos.z },
                             rotation: { x: rot.x, y: rot.y, z: rot.z },
@@ -2004,8 +2080,13 @@ const Scene = ({ currentLobby }) => {
                                 <div className="bg-blue-500/20 px-3 py-1 rounded">
                                     <span className="text-blue-300">F</span> - AI Chat
                                 </div>
-                                <div className="bg-green-500/20 px-3 py-1 rounded">
+                                <div className="bg-green-500/20 px-3 py-1 rounded relative">
                                     <span className="text-green-300">G</span> - Private Message
+                                    {unreadMessages.get(nearestAvatarRef.current.data.profile.id) > 0 && (
+                                        <Badge className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1.5 py-0.5">
+                                            {unreadMessages.get(nearestAvatarRef.current.data.profile.id)}
+                                        </Badge>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -2393,8 +2474,44 @@ const Scene = ({ currentLobby }) => {
                     targetProfileId={privateChatTarget.profileId}
                     targetUsername={privateChatTarget.username}
                     lobbyId={currentLobby.lobbyId}
-                    onClose={() => setPrivateChatTarget(null)}
+                    onClose={() => {
+                        setPrivateChatTarget(null);
+                        // Clear unread count when opening private chat
+                        setUnreadMessages(prev => {
+                            const newMap = new Map(prev);
+                            newMap.delete(privateChatTarget.profileId);
+                            return newMap;
+                        });
+                    }}
                 />
+            )}
+
+            {/* Private Message Notification Popup */}
+            {messageNotification && (
+                <div 
+                    className="fixed top-20 right-4 bg-gradient-to-r from-green-500 to-green-600 text-white p-4 rounded-lg shadow-xl z-50 border border-green-400 animate-in slide-in-from-right duration-300"
+                    style={{ maxWidth: '320px' }}
+                >
+                    <div className="flex items-start gap-3">
+                        <div className="flex-shrink-0 w-10 h-10 bg-white/20 rounded-full flex items-center justify-center text-lg">
+                            💬
+                        </div>
+                        <div className="flex-1 min-w-0">
+                            <p className="font-semibold text-sm mb-1">
+                                New message from {messageNotification.from}
+                            </p>
+                            <p className="text-white/90 text-xs line-clamp-2">
+                                {messageNotification.message}
+                            </p>
+                        </div>
+                        <button
+                            onClick={() => setMessageNotification(null)}
+                            className="flex-shrink-0 text-white/80 hover:text-white text-lg leading-none"
+                        >
+                            ×
+                        </button>
+                    </div>
+                </div>
             )}
 
         </div>
