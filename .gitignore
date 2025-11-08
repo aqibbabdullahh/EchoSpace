@@ -258,3 +258,4 @@ public/uploads/
 *.cpuprofile
 *.heapprofile
 *.heapsnapshot
+.vercel

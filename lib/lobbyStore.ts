@@ -384,10 +384,15 @@ export const useLobbyStore = create<LobbyStore>()(
             // Update avatar state in database
             updateAvatarState: async (updates: Partial<AvatarState>) => {
                 const { profile, currentLobby } = get();
-                if (!profile || !currentLobby) return;
+                if (!profile || !currentLobby) {
+                    console.warn('⚠️ Cannot update avatar state - missing profile or lobby');
+                    return;
+                }
 
                 try {
-                    await supabase
+                    console.log('📤 Updating avatar state:', updates);
+                    
+                    const result = await supabase
                         .from('avatar_states')
                         .upsert({
                             profile_id: profile.id,
@@ -395,10 +400,16 @@ export const useLobbyStore = create<LobbyStore>()(
                             ...updates,
                             last_activity: new Date().toISOString()
                         }, {
-                            onConflict: 'profile_id,lobby_id'  // <-- ADD THIS
+                            onConflict: 'profile_id,lobby_id'
                         });
+                    
+                    if (result.error) {
+                        console.error('❌ Error updating avatar state:', result.error);
+                    } else {
+                        console.log('✅ Avatar state updated successfully');
+                    }
                 } catch (error) {
-                    console.error('Error updating avatar state:', error);
+                    console.error('❌ Exception updating avatar state:', error);
                 }
             },
 
@@ -406,8 +417,11 @@ export const useLobbyStore = create<LobbyStore>()(
             subscribeToLobby: (lobbyId: string) => {
                 const { realtimeChannel, profile } = get();
                 
+                console.log('🔌 Setting up real-time subscription for lobby:', lobbyId);
+                
                 // Clean up existing subscription
                 if (realtimeChannel) {
+                    console.log('🧹 Cleaning up existing channel');
                     supabase.removeChannel(realtimeChannel);
                 }
 
@@ -423,31 +437,51 @@ export const useLobbyStore = create<LobbyStore>()(
                             filter: `lobby_id=eq.${lobbyId}`
                         },
                         async (payload) => {
+                            console.log('📡 Received avatar update:', payload.eventType, payload);
                             const { otherAvatars, profile: currentProfile } = get();
 
                             if (payload.eventType === 'INSERT' || payload.eventType === 'UPDATE') {
                                 const avatarState = payload.new as AvatarState;
                                 
-                                // Skip our own avatar updates
-                                if (currentProfile?.id === avatarState.profile_id) return;
+                                console.log('👤 Avatar state update - profile_id:', avatarState.profile_id, 'current:', currentProfile?.id);
                                 
+                                // Skip our own avatar updates
+                                if (currentProfile?.id === avatarState.profile_id) {
+                                    console.log('⏭️ Skipping own avatar update');
+                                    return;
+                                }
+                                
+                                console.log('✅ Adding/updating other avatar:', avatarState.profile_id);
                                 const newAvatars = new Map(otherAvatars);
                                 newAvatars.set(avatarState.profile_id, avatarState);
                                 set({ otherAvatars: newAvatars });
                                 
                                 // Load profile info if we don't have it cached
                                 if (!get().profilesCache.has(avatarState.profile_id)) {
+                                    console.log('📥 Loading profile info for:', avatarState.profile_id);
                                     await get().loadProfileInfo(avatarState.profile_id);
                                 }
                             } else if (payload.eventType === 'DELETE') {
                                 const avatarState = payload.old as AvatarState;
+                                console.log('🗑️ Removing avatar:', avatarState.profile_id);
                                 const newAvatars = new Map(otherAvatars);
                                 newAvatars.delete(avatarState.profile_id);
                                 set({ otherAvatars: newAvatars });
                             }
                         }
                     )
-                    .subscribe();
+                    .subscribe((status) => {
+                        console.log('📊 Subscription status:', status);
+                        if (status === 'SUBSCRIBED') {
+                            console.log('✅ Successfully subscribed to lobby:', lobbyId);
+                        } else if (status === 'CHANNEL_ERROR') {
+                            console.error('❌ Channel error - realtime subscription failed');
+                        } else if (status === 'TIMED_OUT') {
+                            console.error('⏱️ Subscription timed out');
+                        } else if (status === 'CLOSED') {
+                            console.log('🔒 Channel closed');
+                        }
+                    });
 
                 set({ realtimeChannel: channel });
             },
