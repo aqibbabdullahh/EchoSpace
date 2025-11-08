@@ -20,6 +20,7 @@ import summaryMetadata from '@/public/context/summary_metadata_with_vercel_urls.
 import ReactMarkdown from 'react-markdown';
 // import ttsService from './edgeTTSService'; // Removed TTS to fix WebSocket errors
 import { useLobbyStore } from '@/lib/lobbyStore';
+import { supabase } from '@/lib/supabase';
 import nipplejs from 'nipplejs';
 
 
