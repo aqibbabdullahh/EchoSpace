@@ -55,28 +55,37 @@ export default function PrivateChat({
 
         return () => {
             if (subscriptionRef.current) {
-                supabase.removeChannel(subscriptionRef.current);
+                console.log('🔌 Unsubscribing from private chat channels');
+                supabase.removeChannel(subscriptionRef.current.from);
+                supabase.removeChannel(subscriptionRef.current.to);
             }
         };
     }, [myProfileId, targetProfileId]);
 
     const loadMessages = async () => {
         try {
+            console.log('📥 Loading messages between', myProfileId, 'and', targetProfileId);
+            
+            // Load messages in both directions
             const { data, error } = await supabase
                 .from('private_messages')
                 .select('*')
                 .or(`and(from_profile_id.eq.${myProfileId},to_profile_id.eq.${targetProfileId}),and(from_profile_id.eq.${targetProfileId},to_profile_id.eq.${myProfileId})`)
                 .order('created_at', { ascending: true });
 
-            if (!error && data) {
+            if (error) {
+                console.error('❌ Error loading messages:', error);
+                return;
+            }
+            
+            console.log('✅ Loaded', data?.length || 0, 'messages');
+            if (data) {
                 setMessages(data);
                 // Mark messages as read
                 markMessagesAsRead();
-            } else if (error) {
-                console.error('Error loading messages:', error);
             }
         } catch (error) {
-            console.error('Error loading messages:', error);
+            console.error('❌ Error loading messages:', error);
         }
     };
 
@@ -94,32 +103,64 @@ export default function PrivateChat({
     };
 
     const setupRealtimeSubscription = () => {
-        const channel = supabase
-            .channel(`private_chat:${myProfileId}:${targetProfileId}`)
+        // Subscribe to messages FROM target user TO me
+        const channelFrom = supabase
+            .channel(`private_chat_from:${targetProfileId}:${myProfileId}`)
             .on(
                 'postgres_changes',
                 {
                     event: 'INSERT',
                     schema: 'public',
                     table: 'private_messages',
-                    filter: `or(and(from_profile_id.eq.${myProfileId},to_profile_id.eq.${targetProfileId}),and(from_profile_id.eq.${targetProfileId},to_profile_id.eq.${myProfileId}))`
+                    filter: `from_profile_id=eq.${targetProfileId}`
                 },
                 (payload) => {
-                    console.log('📩 New private message:', payload);
                     const newMsg = payload.new as PrivateMessage;
-                    setMessages(prev => [...prev, newMsg]);
-                    
-                    // Mark as read if from target user
-                    if (newMsg.from_profile_id === targetProfileId) {
+                    // Only add if it's for me
+                    if (newMsg.to_profile_id === myProfileId) {
+                        console.log('📩 Received message from', targetProfileId);
+                        setMessages(prev => {
+                            // Avoid duplicates
+                            if (prev.find(m => m.id === newMsg.id)) return prev;
+                            return [...prev, newMsg];
+                        });
                         markMessagesAsRead();
                     }
                 }
             )
             .subscribe((status) => {
-                console.log('Private chat subscription status:', status);
+                console.log('📡 From subscription:', status);
             });
 
-        subscriptionRef.current = channel;
+        // Subscribe to messages FROM me TO target user
+        const channelTo = supabase
+            .channel(`private_chat_to:${myProfileId}:${targetProfileId}`)
+            .on(
+                'postgres_changes',
+                {
+                    event: 'INSERT',
+                    schema: 'public',
+                    table: 'private_messages',
+                    filter: `from_profile_id=eq.${myProfileId}`
+                },
+                (payload) => {
+                    const newMsg = payload.new as PrivateMessage;
+                    // Only add if it's to target
+                    if (newMsg.to_profile_id === targetProfileId) {
+                        console.log('📤 Sent message to', targetProfileId);
+                        setMessages(prev => {
+                            // Avoid duplicates
+                            if (prev.find(m => m.id === newMsg.id)) return prev;
+                            return [...prev, newMsg];
+                        });
+                    }
+                }
+            )
+            .subscribe((status) => {
+                console.log('📡 To subscription:', status);
+            });
+
+        subscriptionRef.current = { from: channelFrom, to: channelTo };
     };
 
     const sendMessage = async () => {
